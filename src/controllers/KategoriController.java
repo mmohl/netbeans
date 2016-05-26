@@ -36,7 +36,7 @@ public class KategoriController implements CrudInterface<Kategori>{
     }
 
     @Override
-    public List Read() throws SQLException {
+    public java.util.List Read() throws SQLException {
         sql = "select * from kategori";
         Statement statement = Database.getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
@@ -51,7 +51,7 @@ public class KategoriController implements CrudInterface<Kategori>{
             list.add(k);
         }
         
-        return (List) list;
+        return list;
         
     }
 

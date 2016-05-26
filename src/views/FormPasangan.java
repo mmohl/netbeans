@@ -29,9 +29,13 @@ public class FormPasangan extends javax.swing.JFrame {
     public FormPasangan() {
         super("Form Pasangan");
         initComponents();
+        controller = new PasanganController();
                         
         liKategori.setModel(PasanganController.loadModel());
         liKategori.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        
+        rbTersedia.setActionCommand("1");
+        rbTidak.setActionCommand("0");
         
         try {
             cbPegawai.setModel(PasanganController.loadPegawai());
@@ -156,26 +160,34 @@ public class FormPasangan extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSimpanActionPerformed
-        try {
-            // TODO add your handling code here:
+        Pasangan p = new Pasangan();
 
-            JOptionPane.showMessageDialog(rootPane, convertToId() );
+        try {
+            
+            p.setId(null);
+            p.setId_kategori(multiKategori());
+            p.setId_pegawai(convertToId());
+            p.setHarga(tfHarga.getText());
+            p.setStatus(statusGrup.getSelection().getActionCommand());
+            
+            controller.Create(p);
+            
+            JOptionPane.showMessageDialog(rootPane, "Data berhasil ditambahkan");
+        
         } catch (SQLException ex) {
             Logger.getLogger(FormPasangan.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-       
-        
     }//GEN-LAST:event_bSimpanActionPerformed
     
-    private Integer convertToId() throws SQLException {
+    private String convertToId() throws SQLException {
         int id = 0;
         Map<String, Integer> resource = null;
-        
-        resource = PasanganController.loadPegawaiId();    
+         
+        resource = PasanganController.loadPegawaiId();
         id = resource.get(cbPegawai.getSelectedItem().toString());
-        
-        return id;
+ 
+        return String.valueOf(id);
     }
     
     private String multiKategori() {

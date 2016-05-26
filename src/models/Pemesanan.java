@@ -11,10 +11,36 @@ package models;
  */
 public class Pemesanan {
     
-    private String tgl, penyewa, ktp, status, metode, pasangan;
+    private String id, tgl, penyewa, ktp, status, metode, pasangan, lama, nohape;
     
     public Pemesanan() {
         
+    }
+
+    public void setNohape(String nohape) {
+        this.nohape = nohape;
+    }
+
+    public String getNohape() {
+        return nohape;
+    }
+    
+    public void setLama(String lama) {
+        this.lama = lama;
+    }
+
+    public String getLama() {
+        return lama;
+    }
+    
+    
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getKtp() {

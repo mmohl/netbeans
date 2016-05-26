@@ -7,7 +7,6 @@ package controllers;
 
 import connection.Database;
 import interfaces.CrudInterface;
-import java.awt.List;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,18 +34,19 @@ public class PasanganController implements CrudInterface<Pasangan>{
         sql = "insert into pasangan values(?,?,?,?,?)";
         PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
         
-        preparedStatement.setString(1, null);
-        preparedStatement.setString(2, object.getId_kategori());
-        preparedStatement.setString(3, object.getId_pegawai());
-        preparedStatement.setString(4, object.getStatus());
-        preparedStatement.setString(5, object.getHarga());
+        preparedStatement.setString(1, object.getId());
+        preparedStatement.setInt(2, Integer.parseInt(object.getId_pegawai()));
+        preparedStatement.setString(3, object.getId_kategori());
+        preparedStatement.setInt(4, Integer.parseInt(object.getHarga()));
+        preparedStatement.setString(5, object.getStatus());
+        
         preparedStatement.executeUpdate();
         
         return object;
     }
 
     @Override
-    public List Read() throws SQLException {
+    public java.util.List Read() throws SQLException {
         sql = "SELECT p.id, kategori AS id_kategori, pg.nama AS id_pegawai, p.harga, p.`status`\n" +
                 "FROM pasangan p\n" +
                 "JOIN kategori k ON p.id_kategori = k.id\n" +
@@ -67,7 +67,7 @@ public class PasanganController implements CrudInterface<Pasangan>{
             list.add(k);
         }
         
-        return (List) list;
+        return list;
         
     }
 
@@ -151,15 +151,17 @@ public class PasanganController implements CrudInterface<Pasangan>{
     }
     
     public static Map<String, Integer> loadPegawaiId() throws SQLException {
-        Map<String, Integer> id = new HashMap<>();
+        Map<String, Integer> id = new HashMap<String, Integer>();
         
         String sql = "select id, nama from pegawai";
         Statement statement = Database.getConnection().createStatement();
-        try (ResultSet resultSet = statement.executeQuery(sql)) {
-            while (resultSet.next()) {
-                id.put(resultSet.getString("nama"), resultSet.getInt("id"));
-            }
+        ResultSet resultSet = statement.executeQuery(sql);
+        
+        while (resultSet.next()) {
+            id.put(resultSet.getString("nama"), resultSet.getInt("id"));
         }
+        
+        resultSet.close();
         
         return id;
     }

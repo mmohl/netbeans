@@ -7,7 +7,6 @@ package controllers;
 
 import connection.Database;
 import interfaces.CrudInterface;
-import java.awt.List;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,7 +47,7 @@ public class PegawaiController implements CrudInterface<Pegawai>{
     }
 
     @Override
-    public List Read() throws SQLException {
+    public java.util.List Read() throws SQLException {
         sql = "select * from pegawai ";
         Statement statement = Database.getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
@@ -63,7 +62,7 @@ public class PegawaiController implements CrudInterface<Pegawai>{
             Pegawai pegawai = new Pegawai(map);
             list.add(pegawai);
         }
-        return (List) list;
+        return list;
     }
 
     @Override

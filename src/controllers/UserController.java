@@ -6,7 +6,6 @@
 package controllers;
 
 import interfaces.CrudInterface;
-import java.awt.List;
 import java.sql.SQLException;
 
 import connection.Database;
@@ -57,7 +56,7 @@ public class UserController implements CrudInterface<User>{
     }
 
     @Override
-    public List Read() throws SQLException {
+    public java.util.List Read() throws SQLException {
         Statement statement = Database.getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery("select * from mahasiswa");
         java.util.List list = new ArrayList();
@@ -67,7 +66,7 @@ public class UserController implements CrudInterface<User>{
             o.setPassword(resultSet.getString("password"));
             list.add(o);
         }
-        return (List) list;
+        return list;
     }
 
     @Override
