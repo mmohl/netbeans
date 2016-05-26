@@ -9,11 +9,11 @@ package models;
  *
  * @author mmohl
  */
-public class Pemesanan {
+public class Pesanan {
     
-    private String id, tgl, penyewa, ktp, status, metode, pasangan, lama, nohape;
+    private String id, tgl, penyewa, ktp, pasangan, lama, nohape, status;
     
-    public Pemesanan() {
+    public Pesanan() {
         
     }
 
@@ -51,13 +51,6 @@ public class Pemesanan {
         this.ktp = ktp;
     }
 
-    public String getMetode() {
-        return metode;
-    }
-
-    public void setMetode(String metode) {
-        this.metode = metode;
-    }
 
     public String getPasangan() {
         return pasangan;

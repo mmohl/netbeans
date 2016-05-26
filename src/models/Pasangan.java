@@ -11,10 +11,23 @@ package models;
  */
 public class Pasangan {
     public final static String[] pasanganAttrib = {"id", "id_pegawai", "id_kategori", "harga", "status"};
-    private String id, id_pegawai, id_kategori, harga, status;
+    private String id, id_pegawai, id_kategori, harga, status, nama;
     
     public Pasangan() {
         
+    }
+    
+    public Pasangan(String id, String nama) {
+        this.id = id;
+        this.nama = nama;
+    }
+
+    public void setNama(String nama) {
+        this.nama = nama;
+    }
+
+    public String getNama() {
+        return nama;
     }
 
     public void setHarga(String harga) {
@@ -55,6 +68,11 @@ public class Pasangan {
 
     public String getStatus() {
         return status;
+    }
+    
+    @Override
+    public String toString() {
+        return this.nama;
     }
     
 }
