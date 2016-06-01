@@ -18,6 +18,7 @@ public interface CrudInterface<T> {
     public List Read() throws SQLException;
     public void Update(T object) throws SQLException;
     public void Delete(String id) throws SQLException;
+    public List Search(String name) throws SQLException;
     
     
 }

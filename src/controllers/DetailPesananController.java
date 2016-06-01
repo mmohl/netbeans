@@ -78,5 +78,10 @@ public class DetailPesananController implements CrudInterface<DetailPesanan>{
         
         preparedStatement.executeUpdate();
     }
+
+    @Override
+    public List Search(String name) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

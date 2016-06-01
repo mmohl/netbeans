@@ -5,7 +5,6 @@
  */
 package views;
 
-import com.google.common.cache.LoadingCache;
 import controllers.KategoriController;
 import controllers.UserController;
 import helpers.UserCache;
@@ -16,6 +15,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import models.Kategori;
 import models.User;
 
@@ -27,7 +29,7 @@ public class FormKategori extends javax.swing.JFrame {
     private CrudInterface controller;
     private List<Kategori> record = new ArrayList<Kategori>();
     private int row;
-//    private LoadingCache<String, User> myCache = UserCache.getLoadingCache();
+    private int id;
     private User user = UserCache.getUser();
 
     /**
@@ -35,7 +37,79 @@ public class FormKategori extends javax.swing.JFrame {
      */
     public FormKategori() {
         initComponents();
-        controller = new KategoriController();        
+        controller = new KategoriController();      
+        
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                row = jTable1.getSelectedRow();
+                if (row != -1) {
+                        setToTextField();
+                        bSave.setEnabled(false);
+                        bDelete.setEnabled(true);
+                        bUpdate.setEnabled(true);
+                        
+                    try {
+                        id = KategoriController.getIdUser(tfKategori.getText());
+                    } catch (SQLException ex) {
+                        Logger.getLogger(FormKategori.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        
+        initialitation();
+        bDelete.setEnabled(false);
+        bUpdate.setEnabled(false);
+    }
+    
+    /**
+     * Method custom atau buatan
+     */
+    private void loadData() {
+        try {
+            record = controller.Read();
+        } catch (SQLException e) {
+            Logger.getLogger(FormUser.class.getName())
+                    .log(Level.SEVERE, null, e);
+        }
+    }
+        
+    private void fillTable() {
+        Object object[][] = new Object[record.size()][3];
+        int x = 0;
+        for(Kategori obj:record) {
+            object[x][0] = obj.getKategori();
+            object[x][1] = obj.getHarga();
+            x++;
+        }
+        String judul[] = {"Kategori", "Harga"};
+        jTable1.setModel(new DefaultTableModel(object, judul));
+        jScrollPane1.setViewportView(jTable1);
+    }
+    
+    private void setToTextField() {
+        Kategori obj = record.get(row);
+        tfKategori.setText(obj.getKategori());
+        tfHarga.setText(String.valueOf(obj.getHarga()));
+    }
+    
+    private void initialitation() {
+        makeNull();
+        loadData();
+        fillTable();
+    }
+    
+    private void makeNull() {
+        tfHarga.setText("");
+        tfKategori.setText("");
+    }
+    
+    private void bersih() {
+        initialitation();
+        bSave.setEnabled(true);
+        bDelete.setEnabled(false);
+        bUpdate.setEnabled(false);
     }
 
     /**
@@ -51,18 +125,70 @@ public class FormKategori extends javax.swing.JFrame {
         tfKategori = new javax.swing.JTextField();
         lHarga = new javax.swing.JLabel();
         tfHarga = new javax.swing.JTextField();
-        bSImpan = new javax.swing.JButton();
+        bSave = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        bUpdate = new javax.swing.JButton();
+        bDelete = new javax.swing.JButton();
+        bReset = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel1 = new javax.swing.JLabel();
+        tfKeyword = new javax.swing.JTextField();
+        bSearch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        lKategori.setText("Kategori");
+        lKategori.setText("Category");
 
-        lHarga.setText("Harga");
+        lHarga.setText("Price");
 
-        bSImpan.setText("Simpan");
-        bSImpan.addActionListener(new java.awt.event.ActionListener() {
+        bSave.setText("Save");
+        bSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bSImpanActionPerformed(evt);
+                bSaveActionPerformed(evt);
+            }
+        });
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        bUpdate.setText("Update");
+        bUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bUpdateActionPerformed(evt);
+            }
+        });
+
+        bDelete.setText("Delete");
+        bDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bDeleteActionPerformed(evt);
+            }
+        });
+
+        bReset.setText("Reset");
+        bReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bResetActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Keyword");
+
+        bSearch.setText("Search");
+        bSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSearchActionPerformed(evt);
             }
         });
 
@@ -74,57 +200,155 @@ public class FormKategori extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(tfKeyword))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lKategori)
                             .addComponent(lHarga))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfKategori, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
-                            .addComponent(tfHarga)))
+                            .addComponent(tfHarga)
+                            .addComponent(tfKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(bSImpan)
+                        .addComponent(bSave, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(bUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+                            .addComponent(bReset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lKategori)
-                    .addComponent(tfKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lHarga)
-                    .addComponent(tfHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bSImpan))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lKategori)
+                            .addComponent(tfKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lHarga)
+                            .addComponent(tfHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(bUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                            .addComponent(bSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(bReset, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                            .addComponent(bDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(11, 11, 11)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(tfKeyword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(bSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bSImpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSImpanActionPerformed
+    private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
         String _kategori = tfKategori.getText();
         int harga = Integer.parseInt(tfHarga.getText());
         
         try {
-            if (UserController.Cek(user.getId()).equals("1")) {
+//            if (UserController.Cek(user.getId()).equals("1")) {
                 Kategori k = new Kategori();
                 k.setKategori(_kategori);
                 k.setHarga(harga);
                 
                 controller.Create(k);
                 JOptionPane.showMessageDialog(rootPane, "Kategori Berhasil Ditambahkan");
-                tfHarga.setText("");
-                tfKategori.setText("");
-            } else {
-                JOptionPane.showMessageDialog(rootPane, UserController.ACCESS_DENIED);
-            }
+                bersih();
+//            } else {
+//                JOptionPane.showMessageDialog(rootPane, UserController.ACCESS_DENIED);
+//            }
         } catch (SQLException ex) {
             Logger.getLogger(FormKategori.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_bSImpanActionPerformed
+    }//GEN-LAST:event_bSaveActionPerformed
+
+    private void bResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bResetActionPerformed
+        // TODO add your handling code here:
+        bersih();
+        tfKeyword.setText("");
+    }//GEN-LAST:event_bResetActionPerformed
+
+    private void bUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUpdateActionPerformed
+        // TODO add your handling code here:
+        Kategori obj = new Kategori();
+        String kategori = tfKategori.getText();
+        String harga = tfHarga.getText();
+        
+        obj.setId(id);
+        obj.setKategori(kategori);
+        obj.setHarga(Integer.parseInt(harga));
+        
+        try {
+            controller.Update(obj);
+            JOptionPane.showMessageDialog(rootPane, "Data was updated successfully");
+            bersih();
+        } catch (SQLException ex) {
+            Logger.getLogger(FormKategori.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_bUpdateActionPerformed
+
+    private void bDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDeleteActionPerformed
+        // TODO add your handling code here:
+        
+        try {
+            String title = "Delete Option";
+            String message = "Are you sure want to delete this ?";
+            int reply = JOptionPane.showConfirmDialog(rootPane, message, title, JOptionPane.YES_NO_CANCEL_OPTION);
+            
+            if (reply == JOptionPane.YES_OPTION) {
+                controller.Delete(String.valueOf(id));
+                JOptionPane.showMessageDialog(rootPane, "Data was deleted successfully");
+                bersih();
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(FormKategori.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_bDeleteActionPerformed
+
+    private void bSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSearchActionPerformed
+        String key = tfKeyword.getText();
+        
+        try {
+            if (!key.isEmpty()) {
+                record = controller.Search(key);
+                
+                if (!record.isEmpty()) {
+                    fillTable();
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Data was not found");
+                }
+                
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Keyword was not defined");
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(FormKategori.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_bSearchActionPerformed
 
     /**
      * @param args the command line arguments
@@ -163,10 +387,19 @@ public class FormKategori extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bSImpan;
+    private javax.swing.JButton bDelete;
+    private javax.swing.JButton bReset;
+    private javax.swing.JButton bSave;
+    private javax.swing.JButton bSearch;
+    private javax.swing.JButton bUpdate;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lHarga;
     private javax.swing.JLabel lKategori;
     private javax.swing.JTextField tfHarga;
     private javax.swing.JTextField tfKategori;
+    private javax.swing.JTextField tfKeyword;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import models.User;
 
 /**
@@ -25,14 +28,76 @@ public class FormUser extends javax.swing.JFrame {
     int row;
     /**
      * Creates new form User
-     */;
-
-    /**
-     * Creates new form User
      */
     public FormUser() {
         initComponents();
         controller = new UserController();
+        
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                row = jTable1.getSelectedRow();
+                if (row != -1) {
+                        setToTextField();
+                        tfUsername.setEnabled(false);
+                        bSimpan.setEnabled(false);
+                        bHapus.setEnabled(true);
+                        bUbah.setEnabled(true);
+                }
+            }
+        });
+        
+        initialitation();
+        bHapus.setEnabled(false);
+        bUbah.setEnabled(false);
+    }
+    
+    /**
+     * Method Buatan / custom
+     */
+    
+    private void loadData() {
+        try {
+            record = controller.Read();
+        } catch (SQLException e) {
+            Logger.getLogger(FormUser.class.getName())
+                    .log(Level.SEVERE, null, e);
+        }
+    }
+    private void fillTable() {
+        Object object[][] = new Object[record.size()][3];
+        int x = 0;
+        for(User user:record) {
+            object[x][0] = user.getUsername();
+            object[x][1] = user.getPassword();
+            object[x][2] = user.getId();
+            x++;
+        }
+        String judul[] = {"Username", "Password"};
+        jTable1.setModel(new DefaultTableModel(object, judul));
+        jScrollPane1.setViewportView(jTable1);
+    }
+    private void setToTextField() {
+        User user = record.get(row);
+        tfUsername.setText(user.getUsername());
+        pfPassword1.setText(user.getPassword());
+    }
+    private void initialitation() {
+        makeNull();
+        loadData();
+        fillTable();
+    }
+    private void makeNull() {
+        tfUsername.setText("");
+        pfPassword1.setText("");
+        pfPassword2.setText("");
+    }
+    private void bersih() {
+        initialitation();
+        tfUsername.setEnabled(true);
+        bSimpan.setEnabled(true);
+        bHapus.setEnabled(false);
+        bUbah.setEnabled(false);
     }
 
     /**
@@ -51,6 +116,15 @@ public class FormUser extends javax.swing.JFrame {
         lPassword2 = new javax.swing.JLabel();
         pfPassword2 = new javax.swing.JPasswordField();
         bSimpan = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        bHapus = new javax.swing.JButton();
+        bUbah = new javax.swing.JButton();
+        bCari = new javax.swing.JButton();
+        tfKataKunci = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        lKataKunci = new javax.swing.JLabel();
+        bBersih = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -60,10 +134,53 @@ public class FormUser extends javax.swing.JFrame {
 
         lPassword2.setText("Password");
 
-        bSimpan.setText("Simpan");
+        bSimpan.setText("Save");
         bSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bSimpanActionPerformed(evt);
+            }
+        });
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        bHapus.setText("Delete");
+        bHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bHapusActionPerformed(evt);
+            }
+        });
+
+        bUbah.setText("Update");
+        bUbah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bUbahActionPerformed(evt);
+            }
+        });
+
+        bCari.setText("Search");
+        bCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bCariActionPerformed(evt);
+            }
+        });
+
+        lKataKunci.setText("Keyword");
+
+        bBersih.setText("Reset");
+        bBersih.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bBersihActionPerformed(evt);
             }
         });
 
@@ -76,38 +193,72 @@ public class FormUser extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lUsername)
-                            .addComponent(lPassword))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
-                            .addComponent(pfPassword1)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lPassword2)
+                                .addGap(18, 18, 18)
+                                .addComponent(pfPassword2))
+                            .addComponent(jSeparator1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lKataKunci)
+                                .addGap(18, 18, 18)
+                                .addComponent(tfKataKunci))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(bSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(14, 14, 14)
+                                .addComponent(bHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(bUbah, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bBersih, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lUsername)
+                                    .addComponent(lPassword))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(pfPassword1)
+                                    .addComponent(tfUsername))))
+                        .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lPassword2)
-                        .addGap(18, 18, 18)
-                        .addComponent(pfPassword2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(bSimpan)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(bCari)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lUsername)
-                    .addComponent(tfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lPassword)
-                    .addComponent(pfPassword1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lPassword2)
-                    .addComponent(pfPassword2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(bSimpan))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lUsername)
+                            .addComponent(tfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lPassword)
+                            .addComponent(pfPassword1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lPassword2)
+                            .addComponent(pfPassword2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bSimpan)
+                            .addComponent(bHapus)
+                            .addComponent(bBersih, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bUbah))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tfKataKunci, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lKataKunci))
+                        .addGap(29, 29, 29)
+                        .addComponent(bCari)
+                        .addGap(0, 31, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -125,22 +276,94 @@ public class FormUser extends javax.swing.JFrame {
         user.setPassword2(password2);
         
         try {
-            if ( UserController.Cek(1).equals("1") ) {
+//            if ( UserController.Cek(1).equals("1") ) {
                 if (user.banding()) {
                     controller.Create(user);
                     JOptionPane.showMessageDialog(rootPane, "Data Berhasil di Simpan");
+                    initialitation();
                 } else {
                     JOptionPane.showMessageDialog(rootPane, password + " " + password2);
                     pfPassword1.setText("");
                     pfPassword2.setText("");
                 }
-            } else {
-                JOptionPane.showMessageDialog(rootPane, UserController.ACCESS_DENIED);
-            }
+//            } else {
+//                JOptionPane.showMessageDialog(rootPane, UserController.ACCESS_DENIED);
+//            }
         } catch (SQLException ex) {
             Logger.getLogger(FormUser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bSimpanActionPerformed
+
+    private void bUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUbahActionPerformed
+        User user = new User();
+        int row = jTable1.getSelectedRow();
+        String key = jTable1.getModel().getValueAt(row, 0).toString();
+        
+        try {
+            user.setId( UserController.getIdUser(key) );
+            user.setUsername(tfUsername.getText());
+            user.setPassword(pfPassword1.getText());
+            user.setPassword2(pfPassword2.getText());
+            
+            if (user.banding()) {
+               controller.Update(user); 
+               JOptionPane.showMessageDialog(rootPane, "Data was updated successfully");
+               bersih();
+            } else {
+               JOptionPane.showMessageDialog(rootPane, "Password Mismatch, please try again");
+               pfPassword1.setText("");
+               pfPassword2.setText("");
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(FormUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_bUbahActionPerformed
+
+    private void bBersihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBersihActionPerformed
+        // TODO add your handling code here:
+        bersih();
+    }//GEN-LAST:event_bBersihActionPerformed
+
+    private void bHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHapusActionPerformed
+        String name = tfUsername.getText();
+        String title = "Delete Option";
+        String message = "Are you sure want to delete this ?";
+        int reply = JOptionPane.showConfirmDialog(rootPane, title, message, JOptionPane.YES_NO_CANCEL_OPTION);
+        
+        try {
+            if (reply == JOptionPane.YES_OPTION) {
+                controller.Delete(name);
+                JOptionPane.showMessageDialog(rootPane, "Data was deleted successfully");
+                bersih();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FormUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_bHapusActionPerformed
+
+    private void bCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCariActionPerformed
+
+        String name = tfKataKunci.getText();
+        
+        if (!name.isEmpty()) {
+            try {
+                record = controller.Search(name);
+                
+                if (!record.isEmpty()) {
+                    fillTable();
+                    
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Data was not found");
+                }
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(FormUser.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "No keyword is defined");
+        }
+    }//GEN-LAST:event_bCariActionPerformed
 
     /**
      * @param args the command line arguments
@@ -179,12 +402,21 @@ public class FormUser extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bBersih;
+    private javax.swing.JButton bCari;
+    private javax.swing.JButton bHapus;
     private javax.swing.JButton bSimpan;
+    private javax.swing.JButton bUbah;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lKataKunci;
     private javax.swing.JLabel lPassword;
     private javax.swing.JLabel lPassword2;
     private javax.swing.JLabel lUsername;
     private javax.swing.JPasswordField pfPassword1;
     private javax.swing.JPasswordField pfPassword2;
+    private javax.swing.JTextField tfKataKunci;
     private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
 }

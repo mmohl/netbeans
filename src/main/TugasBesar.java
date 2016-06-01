@@ -22,6 +22,15 @@ public class TugasBesar {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1500);
+                } catch (Exception e) {
+                }
+            }
+        });
         try {
             UIManager.setLookAndFeel(new javax.swing.plaf.nimbus.NimbusLookAndFeel());
             SwingUtilities.invokeLater(new Runnable() {

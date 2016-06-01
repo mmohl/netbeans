@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import models.User;
 /**
  *
@@ -21,7 +23,6 @@ import models.User;
 public class UserController implements CrudInterface<User>{
     
     public final static String ACCESS_DENIED = "Akses Ditolak!"; 
-
     
     public UserController() {
         
@@ -58,7 +59,7 @@ public class UserController implements CrudInterface<User>{
     @Override
     public java.util.List Read() throws SQLException {
         Statement statement = Database.getConnection().createStatement();
-        ResultSet resultSet = statement.executeQuery("select * from mahasiswa");
+        ResultSet resultSet = statement.executeQuery("select username, password from user");
         java.util.List list = new ArrayList();
         while (resultSet.next()) {
             User o = new User();
@@ -70,26 +71,27 @@ public class UserController implements CrudInterface<User>{
     }
 
     @Override
-    public void Delete(String id) throws SQLException {
-        String sql = "delete from mahasiswa where id=?";
+    public void Delete(String name) throws SQLException {
+        String sql = "delete from user where username=?";
         PreparedStatement preparedStatement = Database
                 .getConnection()
                 .prepareStatement(sql);
         
-        preparedStatement.setString(1, id);
+        preparedStatement.setString(1, name);
         preparedStatement.executeUpdate();
     }
 
     @Override
     public void Update(User object) throws SQLException {
         
-       String sql = "update  mahasiswa set nim=?, nama=?, alamat=?";
+       String sql = "update  user set username=?, password=? where id=?";
         PreparedStatement preparedStatement = Database
                 .getConnection()
                 .prepareStatement(sql);
         
         preparedStatement.setString(1, object.getUsername());
         preparedStatement.setString(2, object.getPassword());
+        preparedStatement.setInt(3, object.getId());
         preparedStatement.executeUpdate();
         
     }
@@ -122,6 +124,36 @@ public class UserController implements CrudInterface<User>{
         String sql = "update user set status = '" + 0 +"' where id = " + id;
         PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
         preparedStatement.executeUpdate();
+    }
+    
+    public static Integer getIdUser(String key) throws SQLException {
+        int id = 0;
+        Map<String, Integer> data = new HashMap<String, Integer>();
+        String sql = "select id, username from user";
+        
+        Statement statement = Database.getConnection().createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        
+        while (resultSet.next()) {
+            data.put(resultSet.getString("username"), resultSet.getInt("id"));
+        }
+        
+        id = data.get(key);
+        return id;
+    }
+    
+    @Override
+    public java.util.List Search(String name) throws SQLException {
+        Statement statement = Database.getConnection().createStatement();
+        ResultSet resultSet = statement.executeQuery("select username, password from user where username like '%" + name +"%'");
+        java.util.List list = new ArrayList();
+        while (resultSet.next()) {
+            User o = new User();
+            o.setUsername(resultSet.getString("username"));
+            o.setPassword(resultSet.getString("password"));
+            list.add(o);
+        }
+        return list;
     }
     
 }

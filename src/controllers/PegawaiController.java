@@ -14,8 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import javax.swing.DefaultComboBoxModel;
 import models.Pegawai;
 
 /**
@@ -86,6 +86,11 @@ public class PegawaiController implements CrudInterface<Pegawai>{
         PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
         preparedStatement.setInt(1, Integer.parseInt(id));
         preparedStatement.executeUpdate();
+    }
+
+    @Override
+    public List Search(String name) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

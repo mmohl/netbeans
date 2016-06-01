@@ -13,12 +13,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import models.Kategori;
 import models.Pasangan;
 import models.Pegawai;
 
@@ -164,6 +164,11 @@ public class PasanganController implements CrudInterface<Pasangan>{
         resultSet.close();
         
         return id;
+    }
+
+    @Override
+    public List Search(String name) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

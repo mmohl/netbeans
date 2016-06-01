@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import models.Pasangan;
@@ -127,6 +128,11 @@ public class PesananController implements CrudInterface<Pesanan>{
         }
         
         return map;
+    }
+
+    @Override
+    public List Search(String name) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
