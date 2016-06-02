@@ -20,6 +20,8 @@ public class Status {
     public static final String FAILED_SEARCH = "Data was not found";
     public static final String NO_KEYWWORD = "Keyword was not defined";
     public static final String WELCOME_MESSAGE = "Welcome";
+    public static final String LOGIN_FAILED = "Password Mismatch, Please Try Again";
+    public static final String LOGIN_SUCCESS = "Welcome";
     
     public static <T> String SuccessText(T o){
         return o.getClass().getName();

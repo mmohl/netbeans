@@ -130,6 +130,12 @@ public class FormUser extends javax.swing.JFrame {
 
         lUsername.setText("Username");
 
+        tfUsername.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfUsernameKeyTyped(evt);
+            }
+        });
+
         lPassword.setText("Password");
 
         lPassword2.setText("Password");
@@ -243,11 +249,12 @@ public class FormUser extends javax.swing.JFrame {
                             .addComponent(lPassword2)
                             .addComponent(pfPassword2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(bSimpan)
-                            .addComponent(bHapus)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(bBersih, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bUbah))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(bSimpan)
+                                .addComponent(bHapus)
+                                .addComponent(bUbah)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -364,6 +371,10 @@ public class FormUser extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "No keyword is defined");
         }
     }//GEN-LAST:event_bCariActionPerformed
+
+    private void tfUsernameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfUsernameKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfUsernameKeyTyped
 
     /**
      * @param args the command line arguments

@@ -26,7 +26,7 @@ public class TugasBesar {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(1500);
+                    Thread.sleep(4500);
                 } catch (Exception e) {
                 }
             }

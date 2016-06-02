@@ -240,4 +240,17 @@ public class PesananController implements CrudInterface<Pesanan>{
         return model;
     }
     
+    public static String getPicture(Integer id) throws SQLException {
+        String image = null;
+        String sql = "SELECT gambar FROM pegawai WHERE id = ?";
+        PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
+        preparedStatement.setInt(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        
+        while (resultSet.next()) {
+            image = resultSet.getString("gambar");
+        }
+        return image;
+    }
+    
 }

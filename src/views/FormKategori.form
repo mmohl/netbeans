@@ -114,6 +114,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfKategori">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfKategoriKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lHarga">
       <Properties>
@@ -121,6 +124,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfHarga">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfHargaKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bSave">
       <Properties>
@@ -183,6 +189,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfKeyword">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfKeywordKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bSearch">
       <Properties>

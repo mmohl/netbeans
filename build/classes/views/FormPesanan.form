@@ -30,58 +30,73 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lPenyewa" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lKtp" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="tfKtp" pref="324" max="32767" attributes="0"/>
-                                  <Component id="tfPenyewa" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lNohape" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lTanggal" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lSewa" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lPasangan" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lUangMuka" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lHarga" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="rbDebit" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="rbKredit" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="tfLama" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="tfNohape" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="dpTanggal" alignment="0" pref="326" max="32767" attributes="0"/>
-                                  <Component id="tfUangMuka" max="32767" attributes="0"/>
-                                  <Component id="jScrollPane2" alignment="0" min="-2" pref="131" max="-2" attributes="0"/>
-                                  <Component id="tfHarga" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
+                          <Component id="lPasangan" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lUangMuka" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lHarga" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                           <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="bSearch" min="-2" max="-2" attributes="0"/>
                               <EmptySpace pref="22" max="32767" attributes="0"/>
                               <Component id="bReset" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Component id="bSave" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="lPenyewa" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lKtp" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="tfKtp" pref="324" max="32767" attributes="0"/>
+                                          <Component id="tfPenyewa" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="lNohape" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lTanggal" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lSewa" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jScrollPane2" min="-2" pref="131" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="tfLama" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="tfNohape" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="dpTanggal" alignment="0" pref="326" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Component id="tfHarga" alignment="0" min="-2" pref="212" max="-2" attributes="0"/>
+                                          <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                                              <Component id="tfUangMuka" min="-2" pref="212" max="-2" attributes="0"/>
+                                              <Group type="102" attributes="0">
+                                                  <Component id="rbDebit" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                  <Component id="rbKredit" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="lPicture" min="-2" pref="148" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="bSave" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -91,71 +106,82 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lPenyewa" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="tfPenyewa" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lKtp" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="tfKtp" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lNohape" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="tfNohape" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="lTanggal" min="-2" max="-2" attributes="0"/>
-                  <Component id="dpTanggal" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="lSewa" min="-2" max="-2" attributes="0"/>
-                  <Component id="tfLama" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lPasangan" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
-                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="bSearch" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="bReset" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lPenyewa" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="tfPenyewa" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="84" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="jScrollPane2" min="-2" pref="121" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lHarga" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="tfHarga" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lKtp" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="tfKtp" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lNohape" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="tfNohape" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                              <Component id="rbDebit" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="rbKredit" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lTanggal" min="-2" max="-2" attributes="0"/>
+                          <Component id="dpTanggal" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lSewa" min="-2" max="-2" attributes="0"/>
+                          <Component id="tfLama" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Component id="lPicture" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="lPasangan" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="68" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="jScrollPane2" min="-2" pref="121" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="lHarga" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="tfHarga" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                      <Component id="rbDebit" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="rbKredit" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="lUangMuka" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="tfUangMuka" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                              <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                              <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="bSearch" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="bReset" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lUangMuka" min="-2" max="-2" attributes="0"/>
-                          <Component id="tfUangMuka" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="bSave" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -169,6 +195,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfPenyewa">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfPenyewaKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lKtp">
       <Properties>
@@ -176,6 +205,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfKtp">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfKtpKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lNohape">
       <Properties>
@@ -183,6 +215,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfNohape">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfNohapeKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lTanggal">
       <Properties>
@@ -197,6 +232,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfLama">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfLamaKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lPasangan">
       <Properties>
@@ -244,6 +282,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfUangMuka">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfUangMukaKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bReset">
       <Properties>
@@ -327,6 +368,11 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfHarga">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lPicture">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="image"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

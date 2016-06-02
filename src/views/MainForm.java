@@ -90,6 +90,11 @@ public class MainForm extends javax.swing.JFrame {
         menuTransaction.setText("Transaksi");
 
         transaksiPemesanan.setText("Pemesanan");
+        transaksiPemesanan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                transaksiPemesananActionPerformed(evt);
+            }
+        });
         menuTransaction.add(transaksiPemesanan);
 
         transaksiLaporan.setText("Laporan");
@@ -173,6 +178,12 @@ public class MainForm extends javax.swing.JFrame {
         FormPasangan form = new FormPasangan();
         form.setVisible(true);
     }//GEN-LAST:event_masterPasanganActionPerformed
+
+    private void transaksiPemesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transaksiPemesananActionPerformed
+        // TODO add your handling code here:
+        FormPesanan form = new FormPesanan();
+        form.setVisible(true);
+    }//GEN-LAST:event_transaksiPemesananActionPerformed
 
     /**
      * @param args the command line arguments

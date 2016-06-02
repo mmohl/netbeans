@@ -5,12 +5,11 @@
  */
 package views;
 
-import com.google.common.cache.LoadingCache;
 import controllers.UserController;
-import helpers.UserCache;
+import helpers.Status;
+import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -108,23 +107,28 @@ public class FormLogin extends javax.swing.JFrame {
         String password = pfPassword.getText();
         
         try {
-               LoadingCache<String, User> myCache = UserCache.getLoadingCache();
-               User user = myCache.get(username);
-               
-               if (user.getPassword().equals(password)) {
-                   JOptionPane.showMessageDialog(rootPane, "Selamat Datang");
-                    MainForm main = new MainForm();
-                    myMap.put("id", user.getId());
-                    main.setVisible(true);
-                    this.dispose();
-               } else {
-                    JOptionPane.showMessageDialog(rootPane, "Password salah!");
-               }
-        } catch (ExecutionException ex) {
+            if ( controller.login(username, password) ) {
+                JOptionPane.showMessageDialog(rootPane, Status.LOGIN_SUCCESS);
+                MainForm main = new MainForm();
+                main.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(rootPane, Status.LOGIN_FAILED);
+            }
+            
+            
+        } catch (SQLException ex) {
             Logger.getLogger(FormLogin.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(rootPane, "Username tidak ditemukan");
-
         }
+//        if (user.getPassword().equals(password)) {
+//            JOptionPane.showMessageDialog(rootPane, "Selamat Datang");
+//            MainForm main = new MainForm();
+//            myMap.put("id", user.getId());
+//            main.setVisible(true);
+//            this.dispose();
+//        } else {
+//            JOptionPane.showMessageDialog(rootPane, "Password salah!");
+//        }
     }//GEN-LAST:event_bMasukActionPerformed
 
     /**

@@ -147,6 +147,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfNama">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfNamaKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lJenisKelamin">
       <Properties>
@@ -182,6 +185,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfKtp">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfKtpKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
@@ -189,6 +195,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfNohape">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfNohapeKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bSave">
       <Properties>
@@ -253,6 +262,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfKeyword">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfKeywordKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bSearch">
       <Properties>

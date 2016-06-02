@@ -7,8 +7,8 @@ package views;
 
 import controllers.KategoriController;
 import helpers.Status;
-import helpers.UserCache;
 import interfaces.CrudInterface;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,6 @@ public class FormKategori extends javax.swing.JFrame {
     private List<Kategori> record = new ArrayList<Kategori>();
     private int row;
     private int id;
-    private User user = UserCache.getUser();
 
     /**
      * Creates new form Kategori
@@ -111,6 +110,18 @@ public class FormKategori extends javax.swing.JFrame {
         bDelete.setEnabled(false);
         bUpdate.setEnabled(false);
     }
+    
+    protected void validasiAngka(KeyEvent k) {
+        if (Character.isAlphabetic(k.getKeyChar())) {
+            k.consume();
+        }
+    }
+    
+    protected void validasiHuruf(KeyEvent k) {
+        if (Character.isDigit(k.getKeyChar())) {
+            k.consume();
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -140,7 +151,19 @@ public class FormKategori extends javax.swing.JFrame {
 
         lKategori.setText("Category");
 
+        tfKategori.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfKategoriKeyTyped(evt);
+            }
+        });
+
         lHarga.setText("Price");
+
+        tfHarga.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfHargaKeyTyped(evt);
+            }
+        });
 
         bSave.setText("Save");
         bSave.addActionListener(new java.awt.event.ActionListener() {
@@ -184,6 +207,12 @@ public class FormKategori extends javax.swing.JFrame {
         });
 
         jLabel1.setText("Keyword");
+
+        tfKeyword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfKeywordKeyTyped(evt);
+            }
+        });
 
         bSearch.setText("Search");
         bSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -349,6 +378,21 @@ public class FormKategori extends javax.swing.JFrame {
             Logger.getLogger(FormKategori.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bSearchActionPerformed
+
+    private void tfKategoriKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfKategoriKeyTyped
+        // TODO add your handling code here:
+        validasiHuruf(evt);
+    }//GEN-LAST:event_tfKategoriKeyTyped
+
+    private void tfHargaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfHargaKeyTyped
+        // TODO add your handling code here:
+        validasiAngka(evt);
+    }//GEN-LAST:event_tfHargaKeyTyped
+
+    private void tfKeywordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfKeywordKeyTyped
+        // TODO add your handling code here:
+        validasiHuruf(evt);
+    }//GEN-LAST:event_tfKeywordKeyTyped
 
     /**
      * @param args the command line arguments

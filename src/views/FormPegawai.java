@@ -7,6 +7,7 @@ package views;
 
 import controllers.PegawaiController;
 import interfaces.CrudInterface;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -196,6 +197,12 @@ public class FormPegawai extends javax.swing.JFrame {
 
         lNama.setText("Nama");
 
+        tfNama.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfNamaKeyTyped(evt);
+            }
+        });
+
         lJenisKelamin.setText("Jenis Kelamin");
 
         jenisKelaminGrup.add(rbPria);
@@ -208,7 +215,19 @@ public class FormPegawai extends javax.swing.JFrame {
 
         jLabel1.setText("No. Ktp");
 
+        tfKtp.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfKtpKeyTyped(evt);
+            }
+        });
+
         jLabel2.setText("No. Handphone");
+
+        tfNohape.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfNohapeKeyTyped(evt);
+            }
+        });
 
         bSave.setText("Save");
         bSave.addActionListener(new java.awt.event.ActionListener() {
@@ -252,6 +271,12 @@ public class FormPegawai extends javax.swing.JFrame {
         });
 
         lKeyword.setText("Keyword");
+
+        tfKeyword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfKeywordKeyTyped(evt);
+            }
+        });
 
         bSearch.setText("Search");
         bSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -454,6 +479,38 @@ public class FormPegawai extends javax.swing.JFrame {
             Logger.getLogger(FormKategori.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bSearchActionPerformed
+   
+    protected void validasiAngka(KeyEvent k) {
+        if (Character.isAlphabetic(k.getKeyChar())) {
+            k.consume();
+        }
+    }
+    
+    protected void validasiHuruf(KeyEvent k) {
+        if (Character.isDigit(k.getKeyChar())) {
+            k.consume();
+        }
+    }
+    
+    private void tfNamaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNamaKeyTyped
+        // TODO add your handling code here:
+        validasiHuruf(evt);
+    }//GEN-LAST:event_tfNamaKeyTyped
+
+    private void tfKtpKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfKtpKeyTyped
+        // TODO add your handling code here:
+        validasiAngka(evt);
+    }//GEN-LAST:event_tfKtpKeyTyped
+
+    private void tfNohapeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNohapeKeyTyped
+        // TODO add your handling code here:
+        validasiAngka(evt);
+    }//GEN-LAST:event_tfNohapeKeyTyped
+
+    private void tfKeywordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfKeywordKeyTyped
+        // TODO add your handling code here:
+        validasiHuruf(evt);
+    }//GEN-LAST:event_tfKeywordKeyTyped
 
     /**
      * @param args the command line arguments

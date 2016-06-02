@@ -8,6 +8,7 @@ package views;
 import controllers.PasanganController;
 import helpers.Status;
 import interfaces.CrudInterface;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -203,6 +204,12 @@ public class FormPasangan extends javax.swing.JFrame {
 
         lHarga.setText("Price");
 
+        tfHarga.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfHargaKeyTyped(evt);
+            }
+        });
+
         statusGrup.add(rbTersedia);
         rbTersedia.setText("Tersedia");
 
@@ -255,6 +262,12 @@ public class FormPasangan extends javax.swing.JFrame {
         });
 
         lKeyword.setText("Keyword");
+
+        tfKeyword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfKeywordKeyTyped(evt);
+            }
+        });
 
         bSearch.setText("Search");
         bSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -482,6 +495,16 @@ public class FormPasangan extends javax.swing.JFrame {
             Logger.getLogger(FormKategori.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bSearchActionPerformed
+
+    private void tfHargaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfHargaKeyTyped
+        // TODO add your handling code here:
+        validasiAngka(evt);
+    }//GEN-LAST:event_tfHargaKeyTyped
+
+    private void tfKeywordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfKeywordKeyTyped
+        // TODO add your handling code here:
+        validasiHuruf(evt);
+    }//GEN-LAST:event_tfKeywordKeyTyped
     
     private String convertToId() throws SQLException {
         int id = 0;
@@ -519,6 +542,18 @@ public class FormPasangan extends javax.swing.JFrame {
               }
         }
         return id;
+    }
+    
+    protected void validasiAngka(KeyEvent k) {
+        if (Character.isAlphabetic(k.getKeyChar())) {
+            k.consume();
+        }
+    }
+    
+    protected void validasiHuruf(KeyEvent k) {
+        if (Character.isDigit(k.getKeyChar())) {
+            k.consume();
+        }
     }
     /**
      * @param args the command line arguments
