@@ -14,8 +14,8 @@ import java.util.Map;
  */
 public class Pegawai {
     Map<String, String> pegawaiMap = new HashMap<String, String>();
-    public final static String[] pegawaiAttrib = {"id", "nama", "no_handphone", "pekerjaan", "gender", "foto", "tanggal_lahir", "ktp"};
-    private String id, nama, no_handphone, pekerjaan, gender, foto, tanggal_lahir, ktp;
+    private String[] pegawaiAttrib = {"id", "nama", "no_handphone", "jenis_kelamin", "gambar", "tanggal_lahir", "ktp"};
+    private String id, nama, no_handphone, gender, foto, tanggal_lahir, ktp;
     
     public Pegawai() {
        
@@ -29,11 +29,10 @@ public class Pegawai {
        id = (String) map.get(pegawaiAttrib[0]);
        nama = (String) map.get(pegawaiAttrib[1]);
        no_handphone = (String) map.get(pegawaiAttrib[2]);
-       pekerjaan = (String) map.get(pegawaiAttrib[3]);
-       gender = (String) map.get(pegawaiAttrib[4]);
-       foto = (String) map.get(pegawaiAttrib[5]);
-       tanggal_lahir = (String) map.get(pegawaiAttrib[6]);
-       ktp = (String) map.get(pegawaiAttrib[7]);
+       gender = (String) map.get(pegawaiAttrib[3]);
+       foto = (String) map.get(pegawaiAttrib[4]);
+       tanggal_lahir = (String) map.get(pegawaiAttrib[5]);
+       ktp = (String) map.get(pegawaiAttrib[6]);
     }
 
     public void setId(String id) {
@@ -58,10 +57,6 @@ public class Pegawai {
 
     public void setNo_handphone(String no_handphone) {
         this.no_handphone = no_handphone;
-    }
-
-    public void setPekerjaan(String pekerjaan) {
-        this.pekerjaan = pekerjaan;
     }
 
     public void setTanggal_lahir(String tanggal_lahir) {
@@ -90,10 +85,6 @@ public class Pegawai {
 
     public String getNo_handphone() {
         return no_handphone;
-    }
-
-    public String getPekerjaan() {
-        return pekerjaan;
     }
 
     public String getTanggal_lahir() {

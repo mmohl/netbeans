@@ -25,12 +25,12 @@ import models.Pegawai;
 public class PegawaiController implements CrudInterface<Pegawai>{
     
     private String sql;
-    private String[] attributes = {"id", "nama", "no_handphone", "pekerjaan", "jenis_kelamin", "foto", "tanggal_lahir", "ktp"};
+    private String[] attributes = {"id", "nama", "no_handphone", "jenis_kelamin", "gambar", "tanggal_lahir", "ktp"};
     private Map<String, String> map = new HashMap<String, String>();
 
     @Override
     public Pegawai Create(Pegawai object) throws SQLException {
-        sql = "insert into pegawai values (?, ?, ?, ?, ?, ?, ?, ?)";
+        sql = "insert into pegawai values (?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
         
         preparedStatement.setString(1, null);
@@ -40,7 +40,6 @@ public class PegawaiController implements CrudInterface<Pegawai>{
         preparedStatement.setString(5, object.getKtp());
         preparedStatement.setString(6, object.getNo_handphone());
         preparedStatement.setString(7, object.getFoto());
-        preparedStatement.setString(8, object.getPekerjaan());
         preparedStatement.executeUpdate();
         
         return object;
@@ -67,16 +66,15 @@ public class PegawaiController implements CrudInterface<Pegawai>{
 
     @Override
     public void Update(Pegawai object) throws SQLException {
-        sql = "insert into pegawai values (?, ?, ?, ?, ?, ?, ?, ?)";
+        sql = "update pegawai set nama = ?, no_handphone = ?, tanggal_lahir = ?, ktp = ?, jenis_kelamin = ?, gambar = ? where id = ?";
         PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
-        preparedStatement.setString(1, null);
-        preparedStatement.setString(2, object.getNama());
-        preparedStatement.setString(3, object.getNo_handphone());
-        preparedStatement.setString(4, object.getPekerjaan());
-        preparedStatement.setString(5, object.getTanggal_lahir());
-        preparedStatement.setString(6, object.getKtp());
-        preparedStatement.setString(7, object.getGender());
-        preparedStatement.setString(8, object.getFoto());
+        preparedStatement.setInt(7, Integer.parseInt(object.getId()));
+        preparedStatement.setString(1, object.getNama());
+        preparedStatement.setString(2, object.getNo_handphone());
+        preparedStatement.setDate(3, Date.valueOf(object.getTanggal_lahir()));
+        preparedStatement.setString(4, object.getKtp());
+        preparedStatement.setString(5, object.getGender());
+        preparedStatement.setString(6, object.getFoto());
         preparedStatement.executeUpdate();
     }
 
@@ -90,7 +88,36 @@ public class PegawaiController implements CrudInterface<Pegawai>{
 
     @Override
     public List Search(String name) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Statement statement = Database.getConnection().createStatement();
+        ResultSet resultSet = statement.executeQuery("select * from pegawai where nama like '%" + name +"%'");
+        java.util.List list = new ArrayList();
+        while (resultSet.next()) {
+            Pegawai o = new Pegawai();
+            o.setNama(resultSet.getString("nama"));
+            o.setFoto(resultSet.getString("gambar"));
+            o.setGender(resultSet.getString("jenis_kelamin"));
+            o.setKtp(resultSet.getString("ktp"));
+            o.setNo_handphone(resultSet.getString("no_handphone"));
+            o.setTanggal_lahir(String.valueOf(resultSet.getDate("tanggal_lahir")));
+            list.add(o);
+        }
+        return list;
+    }
+    
+    public static Integer getIdUser(String key) throws SQLException {
+        int id = 0;
+        Map<String, Integer> data = new HashMap<String, Integer>();
+        String sql = "select id, nama from pegawai";
+        
+        Statement statement = Database.getConnection().createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        
+        while (resultSet.next()) {
+            data.put(resultSet.getString("nama"), resultSet.getInt("id"));
+        }
+        
+        id = data.get(key);
+        return id;
     }
     
 }

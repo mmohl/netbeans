@@ -11,11 +11,20 @@ package models;
  */
 public class Pesanan {
     
-    private String id, tgl, penyewa, ktp, pasangan, lama, nohape, status;
+    private String id, tgl, penyewa, ktp, pasangan, lama, nohape, status, harga;
     
     public Pesanan() {
         
     }
+
+    public void setHarga(String harga) {
+        this.harga = harga;
+    }
+
+    public String getHarga() {
+        return harga;
+    }
+    
 
     public void setNohape(String nohape) {
         this.nohape = nohape;

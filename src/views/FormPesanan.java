@@ -5,15 +5,31 @@
  */
 package views;
 
+import controllers.PasanganController;
 import controllers.PesananController;
 import interfaces.CrudInterface;
+import java.awt.HeadlessException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import models.Pesanan;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
@@ -21,6 +37,38 @@ import models.Pesanan;
  */
 public class FormPesanan extends javax.swing.JFrame {
     CrudInterface<Pesanan> controller;
+    List<Pesanan> record = new ArrayList<Pesanan>();
+    int row = 0;
+
+    public FormPesanan(CrudInterface<Pesanan> controller, JButton bReset, JButton bSave, JButton bSearch, JComboBox<String> cbPasangan, JXDatePicker dpTanggal, JLabel jLabel1, JLabel jLabel2, JLabel jLabel3, JScrollPane jScrollPane1, JScrollPane jScrollPane2, JSeparator jSeparator3, JLabel lKtp, JLabel lNohape, JLabel lPasangan, JLabel lPenyewa, JLabel lSewa, JLabel lTanggal, JLabel lUangMuka, JList<String> lbKategori, JList<String> lbPasangan, ButtonGroup pembayaranGrup, JRadioButton rbDebit, JRadioButton rbKredit, JTextField tfKtp, JTextField tfLama, JTextField tfNohape, JTextField tfPenyewa, JTextField tfUangMuka) throws HeadlessException {
+        this.controller = controller;
+        this.bReset = bReset;
+        this.bSave = bSave;
+        this.bSearch = bSearch;
+        this.dpTanggal = dpTanggal;
+        this.jLabel1 = jLabel1;
+        this.jLabel2 = jLabel2;
+        this.jLabel3 = jLabel3;
+        this.jScrollPane1 = jScrollPane1;
+        this.jScrollPane2 = jScrollPane2;
+        this.lKtp = lKtp;
+        this.lNohape = lNohape;
+        this.lPasangan = lPasangan;
+        this.lPenyewa = lPenyewa;
+        this.lSewa = lSewa;
+        this.lTanggal = lTanggal;
+        this.lUangMuka = lUangMuka;
+        this.lbKategori = lbKategori;
+        this.lbPasangan = lbPasangan;
+        this.pembayaranGrup = pembayaranGrup;
+        this.rbDebit = rbDebit;
+        this.rbKredit = rbKredit;
+        this.tfKtp = tfKtp;
+        this.tfLama = tfLama;
+        this.tfNohape = tfNohape;
+        this.tfPenyewa = tfPenyewa;
+        this.tfUangMuka = tfUangMuka;
+    }
 
     /**
      * Creates new form FormPesanan
@@ -28,22 +76,44 @@ public class FormPesanan extends javax.swing.JFrame {
     public FormPesanan() {
         initComponents();
         controller = new PesananController();
-        
-        try {
-            cbPasangan.setModel(loadPasanganModel());
-        } catch (SQLException ex) {
-            Logger.getLogger(FormPesanan.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        lbPasangan.setModel(loadListPasangan());
+        lbKategori.setModel(loadListKategori());
+       
         
         tfUangMuka.setEnabled(false);
         rbDebit.setActionCommand("0");
         rbKredit.setActionCommand("1");
+        tfHarga.setEditable(false);
+        
+        lbPasangan.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                String name;
+                int id;
+                String harga;
+                try {
+                    name = lbPasangan.getSelectedValue();
+                    id = PesananController.getIdPegawai(name);
+                    harga = PesananController.getTotalPrice(id);
+                    
+                    tfHarga.setText(harga);
+                } catch (SQLException ex) {
+                    Logger.getLogger(FormPesanan.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         
     }
     
-    private DefaultComboBoxModel loadPasanganModel() throws SQLException {
-        DefaultComboBoxModel cm = PesananController.loadPasangan();
-        return cm;
+    private DefaultListModel loadListPasangan() {
+        DefaultListModel<String> model = PesananController.loadModelCouples();
+        return model;
+    }
+    
+    private DefaultListModel loadListKategori() {
+        DefaultListModel<String> model = PesananController.loadModelCategories();
+        return model;
     }
 
     /**
@@ -67,13 +137,22 @@ public class FormPesanan extends javax.swing.JFrame {
         lSewa = new javax.swing.JLabel();
         tfLama = new javax.swing.JTextField();
         lPasangan = new javax.swing.JLabel();
-        cbPasangan = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         rbDebit = new javax.swing.JRadioButton();
         rbKredit = new javax.swing.JRadioButton();
-        bSimpan = new javax.swing.JButton();
+        bSave = new javax.swing.JButton();
         lUangMuka = new javax.swing.JLabel();
         tfUangMuka = new javax.swing.JTextField();
+        bReset = new javax.swing.JButton();
+        bSearch = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lbKategori = new javax.swing.JList<>();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        lbPasangan = new javax.swing.JList<>();
+        lHarga = new javax.swing.JLabel();
+        tfHarga = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,8 +167,6 @@ public class FormPesanan extends javax.swing.JFrame {
         lSewa.setText("Lama Sewa");
 
         lPasangan.setText("Pasangan");
-
-        cbPasangan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel1.setText("Pembayaran");
 
@@ -109,14 +186,48 @@ public class FormPesanan extends javax.swing.JFrame {
             }
         });
 
-        bSimpan.setText("Simpan");
-        bSimpan.addActionListener(new java.awt.event.ActionListener() {
+        bSave.setText("Save");
+        bSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bSimpanActionPerformed(evt);
+                bSaveActionPerformed(evt);
             }
         });
 
         lUangMuka.setText("Uang Muka");
+
+        bReset.setText("Reset");
+        bReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bResetActionPerformed(evt);
+            }
+        });
+
+        bSearch.setText("Search");
+        bSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSearchActionPerformed(evt);
+            }
+        });
+
+        lbKategori.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(lbKategori);
+
+        jLabel2.setText("Filter");
+
+        jLabel3.setText("Categories");
+
+        lbPasangan.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(lbPasangan);
+
+        lHarga.setText("Harga");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -127,36 +238,46 @@ public class FormPesanan extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lPenyewa)
-                            .addComponent(lKtp))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lPenyewa)
+                                    .addComponent(lKtp))
                                 .addGap(49, 49, 49)
-                                .addComponent(tfKtp))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                                .addComponent(tfPenyewa, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lNohape)
-                            .addComponent(lTanggal)
-                            .addComponent(lSewa)
-                            .addComponent(lPasangan)
-                            .addComponent(jLabel1)
-                            .addComponent(bSimpan)
-                            .addComponent(lUangMuka))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(tfKtp, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+                                    .addComponent(tfPenyewa)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(rbDebit)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(rbKredit))
-                            .addComponent(tfNohape)
-                            .addComponent(dpTanggal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tfLama)
-                            .addComponent(cbPasangan, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tfUangMuka))))
-                .addContainerGap())
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lNohape)
+                                    .addComponent(lTanggal)
+                                    .addComponent(lSewa)
+                                    .addComponent(lPasangan)
+                                    .addComponent(jLabel1)
+                                    .addComponent(lUangMuka)
+                                    .addComponent(lHarga))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(rbDebit)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(rbKredit))
+                                    .addComponent(tfLama)
+                                    .addComponent(tfNohape)
+                                    .addComponent(dpTanggal, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
+                                    .addComponent(tfUangMuka)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfHarga))))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jScrollPane1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(bSearch)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                                .addComponent(bReset))))
+                    .addComponent(bSave))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,22 +302,40 @@ public class FormPesanan extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lSewa)
                     .addComponent(tfLama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lPasangan)
-                    .addComponent(cbPasangan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(rbKredit)
-                    .addComponent(rbDebit))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lUangMuka)
-                    .addComponent(tfUangMuka, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addComponent(bSimpan)
-                .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lPasangan)
+                            .addComponent(jLabel2))
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel3)
+                        .addGap(15, 15, 15)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bSearch)
+                            .addComponent(bReset))
+                        .addContainerGap(84, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lHarga)
+                            .addComponent(tfHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(rbDebit)
+                                .addComponent(rbKredit)))
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lUangMuka)
+                            .addComponent(tfUangMuka, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(bSave)
+                        .addGap(19, 19, 19))))
         );
 
         pack();
@@ -213,7 +352,7 @@ public class FormPesanan extends javax.swing.JFrame {
         tfUangMuka.setEnabled(true);
     }//GEN-LAST:event_rbKreditActionPerformed
 
-    private void bSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSimpanActionPerformed
+    private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
         try {
             Pesanan pesanan = new Pesanan();
             
@@ -227,13 +366,55 @@ public class FormPesanan extends javax.swing.JFrame {
             pesanan.setTgl(prosesTanggal());
             
             controller.Create(pesanan);
-            JOptionPane.showMessageDialog(rootPane, prosesPasangan());
             
         } catch (SQLException ex) {
             Logger.getLogger(FormPesanan.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_bSimpanActionPerformed
+//        JOptionPane.showMessageDialog(rootPane, lbPasangan.getSelectedValue().toString());
+    }//GEN-LAST:event_bSaveActionPerformed
 
+    private void bSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSearchActionPerformed
+        // TODO add your handling code here:
+        String categories = multiKategori();
+        try {
+            DefaultListModel model = PesananController.getFilteredModel(categories);
+            lbPasangan.removeAll();
+            lbPasangan.setModel(model);
+            lbPasangan.clearSelection();
+            jScrollPane2.setViewportView(lbPasangan);
+        } catch (SQLException ex) {
+            Logger.getLogger(FormPesanan.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_bSearchActionPerformed
+
+    private void bResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bResetActionPerformed
+        // TODO add your handling code here:
+        DefaultListModel model = loadListPasangan();
+        lbPasangan.removeAll();
+        lbPasangan.setModel(model);
+        lbPasangan.clearSelection();
+        jScrollPane1.setViewportView(lbKategori);
+        jScrollPane2.setViewportView(lbPasangan);
+    }//GEN-LAST:event_bResetActionPerformed
+    
+    private String multiKategori() {
+        int[] k = lbKategori.getSelectedIndices();
+        String id = "";
+        Map<String, Integer> _id = PasanganController.loadModelId();
+        
+        for (int i = 0; i < k.length; i++) {
+            
+              if (!id.isEmpty()) {
+                  id += "-";
+              }
+              
+              if ( _id.containsKey(lbKategori.getModel().getElementAt(k[i])) ) {
+                  id += String.valueOf( _id.get(lbKategori.getModel().getElementAt(k[i])) );
+              }
+        }
+        return id;
+    }
+    
     private String prosesTanggal() {
         String tanggal = "";
         String y, m, d;
@@ -250,7 +431,7 @@ public class FormPesanan extends javax.swing.JFrame {
         String id = "";
         Map<String, Integer> map = PesananController.loadPasanganId();
         
-        id = String.valueOf( map.get( cbPasangan.getSelectedItem().toString() ) ); 
+        id = String.valueOf( map.get( lbPasangan.getSelectedValue().toString() ) ); 
         return id;
     }
     
@@ -293,10 +474,16 @@ public class FormPesanan extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bSimpan;
-    private javax.swing.JComboBox<String> cbPasangan;
+    private javax.swing.JButton bReset;
+    private javax.swing.JButton bSave;
+    private javax.swing.JButton bSearch;
     private org.jdesktop.swingx.JXDatePicker dpTanggal;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lHarga;
     private javax.swing.JLabel lKtp;
     private javax.swing.JLabel lNohape;
     private javax.swing.JLabel lPasangan;
@@ -304,9 +491,12 @@ public class FormPesanan extends javax.swing.JFrame {
     private javax.swing.JLabel lSewa;
     private javax.swing.JLabel lTanggal;
     private javax.swing.JLabel lUangMuka;
+    private javax.swing.JList<String> lbKategori;
+    private javax.swing.JList<String> lbPasangan;
     private javax.swing.ButtonGroup pembayaranGrup;
     private javax.swing.JRadioButton rbDebit;
     private javax.swing.JRadioButton rbKredit;
+    private javax.swing.JTextField tfHarga;
     private javax.swing.JTextField tfKtp;
     private javax.swing.JTextField tfLama;
     private javax.swing.JTextField tfNohape;

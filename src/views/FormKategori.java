@@ -6,7 +6,7 @@
 package views;
 
 import controllers.KategoriController;
-import controllers.UserController;
+import helpers.Status;
 import helpers.UserCache;
 import interfaces.CrudInterface;
 import java.sql.SQLException;
@@ -338,11 +338,11 @@ public class FormKategori extends javax.swing.JFrame {
                 if (!record.isEmpty()) {
                     fillTable();
                 } else {
-                    JOptionPane.showMessageDialog(rootPane, "Data was not found");
+                    JOptionPane.showMessageDialog(rootPane, Status.FAILED_SEARCH);
                 }
                 
             } else {
-                JOptionPane.showMessageDialog(rootPane, "Keyword was not defined");
+                JOptionPane.showMessageDialog(rootPane, Status.NO_KEYWWORD);
             }
             
         } catch (SQLException ex) {

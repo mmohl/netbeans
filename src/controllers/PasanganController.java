@@ -47,11 +47,8 @@ public class PasanganController implements CrudInterface<Pasangan>{
 
     @Override
     public java.util.List Read() throws SQLException {
-        sql = "SELECT p.id, kategori AS id_kategori, pg.nama AS id_pegawai, p.harga, p.`status`\n" +
-                "FROM pasangan p\n" +
-                "JOIN kategori k ON p.id_kategori = k.id\n" +
-                "JOIN pegawai pg ON p.id_pegawai = pg.id\n" +
-                "WHERE p.`status` = 1";
+        sql = "SELECT pe.nama AS nama, p.harga AS harga, p.id_kategori AS id_kategori, p.`status` AS status FROM pasangan p \n" +
+                "LEFT JOIN pegawai pe ON p.id_pegawai = pe.id";
         Statement statement = Database.getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
         java.util.List list = new ArrayList();
@@ -59,10 +56,9 @@ public class PasanganController implements CrudInterface<Pasangan>{
         while (resultSet.next()) {
             Pasangan k = new Pasangan();
             
-            k.setId(resultSet.getString("id"));
+            k.setNama(resultSet.getString("nama"));
             k.setHarga(resultSet.getString("harga"));
             k.setId_kategori(resultSet.getString("id_kategori"));
-            k.setId_pegawai(resultSet.getString("id_pegawai"));
             k.setStatus(resultSet.getString("status"));
             list.add(k);
         }
@@ -73,23 +69,23 @@ public class PasanganController implements CrudInterface<Pasangan>{
 
     @Override
     public void Update(Pasangan object) throws SQLException {
-        sql = "update pasangan set id_pegawai = ?, id_kategori = ?, harga = ?, status = ?";
-        
+        sql = "update pasangan set id_pegawai = ?, id_kategori = ?, harga = ?, status = ? where id = ?";
         PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
-        preparedStatement.setString(1, object.getId_pegawai());
+        
+        preparedStatement.setInt(1, Integer.parseInt(object.getId_pegawai()));
         preparedStatement.setString(2, object. getId_kategori());
-        preparedStatement.setString(3, object. getHarga());
+        preparedStatement.setInt(3, Integer.parseInt(object.getHarga()));
         preparedStatement.setString(4, object. getStatus());
-//        preparedStatement.setString(5, object. getId());
+        preparedStatement.setInt(5, Integer.parseInt(object.getId()));
         preparedStatement.executeUpdate();
     }
 
     @Override
     public void Delete(String id) throws SQLException {
-        sql = "delete from kategori where id = ?";
+        sql = "delete from pasangan where id = ?";
         
         PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
-        preparedStatement.setString(1, id);
+        preparedStatement.setInt(1, Integer.parseInt(id));
         preparedStatement.executeUpdate();
     }
     
@@ -137,7 +133,7 @@ public class PasanganController implements CrudInterface<Pasangan>{
     public static DefaultComboBoxModel loadPegawai() throws SQLException {
         DefaultComboBoxModel combo = new DefaultComboBoxModel();
         
-        String sql = "select nama from pegawai";
+        String sql = "SELECT p.nama FROM pegawai p LEFT JOIN pasangan pp ON p.id = pp.id_pegawai WHERE pp.id IS NULL";
         ResultSet resultSet;
         try (Statement statement = Database.getConnection().createStatement()) {
             resultSet = statement.executeQuery(sql);
@@ -168,7 +164,93 @@ public class PasanganController implements CrudInterface<Pasangan>{
 
     @Override
     public List Search(String name) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        sql = "SELECT pe.nama AS nama, p.harga AS harga, p.id_kategori AS id_kategori, p.`status` AS status FROM pasangan p \n" +
+                "LEFT JOIN pegawai pe ON p.id_pegawai = pe.id where pe.nama like '%" + name +"%'";
+        Statement statement = Database.getConnection().createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        java.util.List list = new ArrayList();
+        
+        while (resultSet.next()) {
+            Pasangan k = new Pasangan();
+            
+            k.setNama(resultSet.getString("nama"));
+            k.setHarga(resultSet.getString("harga"));
+            k.setId_kategori(resultSet.getString("id_kategori"));
+            k.setStatus(resultSet.getString("status"));
+            list.add(k);
+        }
+        
+        return list;
     }
+    
+    public static Integer getIdUser(String key) throws SQLException {
+        int id = 0;
+        Map<String, Integer> data = new HashMap<String, Integer>();
+        String sql = "SELECT p.id AS id, pe.nama AS nama FROM pasangan p \n" +
+                "LEFT JOIN pegawai pe ON p.id_pegawai = pe.id";
+        
+        Statement statement = Database.getConnection().createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        
+        while (resultSet.next()) {
+            data.put(resultSet.getString("nama"), resultSet.getInt("id"));
+        }
+        
+        id = data.get(key);
+        return id;
+    }
+    
+    public static String getAllCategories(String kategori) throws SQLException {
+        String result = "";
+        String sql = "SELECT kategori, id FROM kategori";
+        Map<Integer, String> resources = new HashMap<Integer, String>();
+        int i = 1;
+        
+        Statement preparedStatement = Database.getConnection().createStatement();
+        ResultSet resultSet = preparedStatement.executeQuery(sql);
+        
+        while (resultSet.next()) {
+            resources.put(resultSet.getInt("id"), resultSet.getString("kategori"));
+        }
+        
+        for (String id : kategori.split("-")) {
+            
+            if (!result.isEmpty()) {
+                result += ", ";
+            }
+            
+            String data = resources.get(Integer.parseInt(id));
+            result += String.valueOf(i) + ". " + data;
+            i += 1;
+        }
+        
+        return result;
+    }
+    
+    public static String sumCategoriesPrice(String kategori) throws SQLException {
+        String result = "";
+        String sql = "SELECT harga, id FROM kategori";
+        Map<Integer, Integer> resources = new HashMap<Integer, Integer>();
+        int temporary = 0;
+        
+        Statement preparedStatement = Database.getConnection().createStatement();
+        ResultSet resultSet = preparedStatement.executeQuery(sql);
+        
+        while (resultSet.next()) {
+            resources.put(resultSet.getInt("id"), resultSet.getInt("harga"));
+        }
+        
+        for (String id : kategori.split("-")) {
+            
+            temporary += resources.get(Integer.parseInt(id));
+
+        }
+        
+        result = String.valueOf(temporary);
+        
+        return result;
+    }
+    
+     
     
 }

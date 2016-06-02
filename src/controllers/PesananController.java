@@ -16,7 +16,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import models.Pasangan;
 import models.Pesanan;
 
@@ -133,6 +136,108 @@ public class PesananController implements CrudInterface<Pesanan>{
     @Override
     public List Search(String name) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public static DefaultListModel loadModelCategories() {
+        DefaultListModel<String> combo = new DefaultListModel<String>();
+        String sql = "select kategori from kategori";
+        Statement statement;
+        
+        try {
+            statement = Database.getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            
+            while(resultSet.next()) {
+                combo.addElement(resultSet.getString("kategori"));
+            }
+            
+            resultSet.close();
+            statement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PasanganController.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        
+        return combo;
+    }
+    
+    public static DefaultListModel loadModelCouples() {
+        DefaultListModel<String> combo = new DefaultListModel<String>();
+        String sql = "SELECT pe.nama as nama FROM pasangan p LEFT JOIN pegawai pe ON p.id_pegawai = pe.id";
+        Statement statement;
+        
+        try {
+            statement = Database.getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            
+            while(resultSet.next()) {
+                combo.addElement(resultSet.getString("nama"));
+            }
+            
+            resultSet.close();
+            statement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PasanganController.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        
+        return combo;
+    }
+    
+    public static Integer getIdPegawai(String name) throws SQLException {
+        int id = 0;
+        String sql = "SELECT id FROM pegawai WHERE nama = ?";
+        
+        PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, name);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        
+        while (resultSet.next()) {
+            id = resultSet.getInt("id");
+        }
+        
+        return id;
+    }
+    
+    public static String getTotalPrice(Integer id) throws SQLException {
+        String total;
+        int temp;
+        Map<String, String> value = new HashMap<String, String>();
+        String allCategories = "";
+        String sql = "SELECT pa.harga AS harga, pa.id_kategori AS id_kategori FROM pegawai pe\n" +
+                     "JOIN pasangan pa ON pe.id = pa.id_pegawai WHERE pe.id = ?";
+        
+        PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
+        preparedStatement.setInt(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        
+        while (resultSet.next()) {
+            value.put("id_kategori", resultSet.getString("id_kategori"));
+            value.put("harga", String.valueOf(resultSet.getInt("harga")));
+        }
+        
+        resultSet.close();
+        preparedStatement.close();
+        
+        allCategories = PasanganController.sumCategoriesPrice(value.get("id_kategori"));
+        
+        temp = Integer.parseInt(allCategories) + Integer.parseInt(value.get("harga"));
+        total = String.valueOf(temp);
+        
+        return total;
+    }
+    
+    public static DefaultListModel getFilteredModel(String kategori) throws SQLException {
+        DefaultListModel<String> model = new DefaultListModel<String>();
+        String sql = "SELECT pe.nama AS nama FROM pegawai pe \n" +
+                     "LEFT JOIN pasangan pa ON pe.id = pa.id_pegawai\n" +
+                     "WHERE pa.id_kategori LIKE '%" + kategori + "%'";
+        Statement preparedStatement = Database.getConnection().createStatement();
+        ResultSet resultSet = preparedStatement.executeQuery(sql);
+        
+        while (resultSet.next()) {
+            model.addElement(resultSet.getString("nama"));
+        }
+        
+        return model;
     }
     
 }
