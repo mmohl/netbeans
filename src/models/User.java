@@ -5,22 +5,42 @@
  */
 package models;
 
+import java.util.List;
+
 /**
  *
  * @author mmohl
  */
-public class User {
+public class User extends Validator{
     
+    private String[] userAttrib = new String[]{"username", "password"};
     private String username, password, password2, status;
     private int id;
-    
-    public User() {
-        
+
+    @Override
+    protected final void inisialisasi() {
+        attributes = userAttrib;
+        beValidate.put("username", new String[]{"3", "25", username});
+        beValidate.put("password", new String[]{"6", "50", password});
     }
+    
+    public User() {}
     
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        inisialisasi();
+    }
+    
+    public User(String username, String password, String password2) {
+        this.username = username;
+        this.password = password;
+        this.password2 = password2;
+        inisialisasi();
+    }
+
+    public List<String> getErrorList() {
+        return errorList;
     }
 
     public void setStatus(String status) {

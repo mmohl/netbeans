@@ -22,8 +22,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -48,7 +50,7 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
     JFileChooser fc;
     String gambar;
     String path = System.getProperty("user.dir") + "/src/images/";
-    File file;
+    File file = null;
     int row = 0;
     int val = 0;
     private int id = 0;
@@ -185,6 +187,30 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
         bUpdate.setEnabled(false);
         lPictureName.setText("");
         fc.cancelSelection();
+    }
+    
+    @Override
+    public Map assignToModel() {
+        Map<String, String> model = new HashMap<>();
+        file = fc.getSelectedFile();
+        
+        String id = null;
+        String name = tfNama.getText();
+        String ktp = tfKtp.getText();
+        String nohape = tfNohape.getText();
+        String jeke = jenisKelaminGrup.getSelection().getActionCommand();
+        String tanggal = dpTanggal.getDate().getYear()+1900 + "-" + (dpTanggal.getDate().getMonth() + 1) + "-" +dpTanggal.getDate().getDate();
+        String gambar = saveAndGetNameImage(file);
+        
+        model.put("id", id);
+        model.put("ktp", ktp);
+        model.put("nama", name);
+        model.put("no_handphone", nohape);
+        model.put("jenis_kelamin", jeke);
+        model.put("gambar", gambar);
+        model.put("tanggal_lahir", tanggal);
+        
+        return model;
     }
     
 
@@ -440,26 +466,31 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
 
     private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
 //        // TODO add your handling code here:
-        Pegawai pegawai = new Pegawai();
+        Pegawai pegawai = new Pegawai(assignToModel());
           
-          file = fc.getSelectedFile();
-          pegawai.setGender(jenisKelaminGrup.getSelection().getActionCommand());
-          pegawai.setKtp(tfKtp.getText());
-          pegawai.setNama(tfNama.getText());
-          pegawai.setNo_handphone(tfNohape.getText());
-          String tanggal = dpTanggal.getDate().getYear()+1900 + "-" + (dpTanggal.getDate().getMonth() + 1) + "-" +dpTanggal.getDate().getDate();
-          pegawai.setTanggal_lahir(tanggal);
-          pegawai.setFoto( saveAndGetNameImage(file) );
-          boolean isValid = new KTPValidator(pegawai.getKtp()).validate();
+//          file = fc.getSelectedFile();
+//          pegawai.setGender(jenisKelaminGrup.getSelection().getActionCommand());
+//          pegawai.setKtp(tfKtp.getText());
+//          pegawai.setNama(tfNama.getText());
+//          pegawai.setNo_handphone(tfNohape.getText());
+//          String tanggal = dpTanggal.getDate().getYear()+1900 + "-" + (dpTanggal.getDate().getMonth() + 1) + "-" +dpTanggal.getDate().getDate();
+//          pegawai.setTanggal_lahir(tanggal);
+//          pegawai.setFoto( saveAndGetNameImage(file) );
+          boolean isValidKTP = new KTPValidator(pegawai.getKtp()).validate();
+          boolean isValidLength = pegawai.doValidation();
           
-          JOptionPane.showMessageDialog(rootPane, isValid);
             try {
-                if (isValid != true) {
+                if ((isValidKTP != true) && (isValidLength)) {
                     controller.Create(pegawai);
                     JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_INSERT);
                     bersih();
                 } else {
-                    JOptionPane.showMessageDialog(rootPane, "KTP sudah terdaftar");
+                    List<String> error = pegawai.getErrorList();
+                    
+                    if (isValidKTP != true) {
+                        JOptionPane.showMessageDialog(rootPane, "KTP sudah terdaftar");
+                    }
+                    JOptionPane.showMessageDialog(rootPane, error.toArray());
                 }
                 
             } catch (SQLException ex) {
@@ -545,11 +576,11 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
                 if (!record.isEmpty()) {
                     fillTable();
                 } else {
-                    JOptionPane.showMessageDialog(rootPane, "Data was not found");
+                    JOptionPane.showMessageDialog(rootPane, Status.FAILED_SEARCH);
                 }
                 
             } else {
-                JOptionPane.showMessageDialog(rootPane, "Keyword was not defined");
+                JOptionPane.showMessageDialog(rootPane, Status.NO_KEYWWORD);
             }
             
         } catch (SQLException ex) {
@@ -572,7 +603,7 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
     private String saveAndGetNameImage(File file) {
         String fullname = null;
         
-        if (val == JFileChooser.APPROVE_OPTION) {
+        if (val == JFileChooser.APPROVE_OPTION && file != null) {
             String name = tfNama.getText();
             String eks = file.getName().substring(file.getName().length() - 3, file.getName().length());
             fullname = name + "." + eks;
@@ -685,4 +716,6 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
     private javax.swing.JTextField tfNama;
     private javax.swing.JTextField tfNohape;
     // End of variables declaration//GEN-END:variables
+
+
 }

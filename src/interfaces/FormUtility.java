@@ -5,6 +5,7 @@
  */
 package interfaces;
 
+import java.util.Map;
 import static javafx.scene.input.KeyCode.T;
 
 /**
@@ -24,5 +25,7 @@ public interface FormUtility {
     public void makeNull();
     
     public void bersih();
+    
+    public Map<String, String> assignToModel();
     
 }

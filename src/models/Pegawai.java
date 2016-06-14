@@ -6,15 +6,16 @@
 package models;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  *
  * @author mmohl
  */
-public class Pegawai {
+public class Pegawai extends Validator{
     Map<String, String> pegawaiMap = new HashMap<String, String>();
-    private String[] pegawaiAttrib = {"id", "nama", "no_handphone", "jenis_kelamin", "gambar", "tanggal_lahir", "ktp"};
+    public String[] pegawaiAttrib = {"id", "nama", "no_handphone", "jenis_kelamin", "gambar", "tanggal_lahir", "ktp"};
     private String id, nama, no_handphone, gender, foto, tanggal_lahir, ktp;
     
     public Pegawai() {
@@ -33,6 +34,19 @@ public class Pegawai {
        foto = (String) map.get(pegawaiAttrib[4]);
        tanggal_lahir = (String) map.get(pegawaiAttrib[5]);
        ktp = (String) map.get(pegawaiAttrib[6]);
+       inisialisasi();
+    }
+
+    @Override
+    protected final void inisialisasi() {
+        attributes = new String[]{"nama", "no_handphone", "ktp"};
+        beValidate.put("nama", new String[]{"3", "50", this.nama});
+        beValidate.put("no_handphone", new String[]{"11", "12", this.no_handphone});
+        beValidate.put("ktp", new String[]{"16", "16", this.ktp});
+    }
+
+    public List<String> getErrorList() {
+        return errorList;
     }
 
     public void setId(String id) {

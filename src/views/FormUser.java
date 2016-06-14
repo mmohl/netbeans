@@ -32,6 +32,7 @@ public final class FormUser extends javax.swing.JFrame implements FormUtility{
      * Creates new form User
      */
     public FormUser() {
+        super("Form User");
         initComponents();
         controller = new UserController();
         
@@ -286,13 +287,10 @@ public final class FormUser extends javax.swing.JFrame implements FormUtility{
         String password = pfPassword1.getText();
         String password2 = pfPassword2.getText();
         
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setPassword2(password2);
+        User user = new User(username, password, password2);
         
         try {
-//            if ( UserController.Cek(1).equals("1") ) {
+            if ( user.doValidation() ) {
                 if (user.banding()) {
                     controller.Create(user);
                     JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_INSERT);
@@ -302,9 +300,10 @@ public final class FormUser extends javax.swing.JFrame implements FormUtility{
                     pfPassword1.setText("");
                     pfPassword2.setText("");
                 }
-//            } else {
-//                JOptionPane.showMessageDialog(rootPane, UserController.ACCESS_DENIED);
-//            }
+            } else {
+                List<String> error = user.getErrorList();
+                JOptionPane.showMessageDialog(rootPane, error.toArray());
+            }
         } catch (SQLException ex) {
             Logger.getLogger(FormUser.class.getName()).log(Level.SEVERE, null, ex);
         }
