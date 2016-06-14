@@ -16,18 +16,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import models.Kategori;
-import models.User;
 
 /**
  *
  * @author mmohl
  */
 public class FormKategori extends javax.swing.JFrame {
-    private CrudInterface controller;
-    private List<Kategori> record = new ArrayList<Kategori>();
+    private final CrudInterface controller;
+    private List<Kategori> record = new ArrayList<>();
     private int row;
     private int id;
 
@@ -38,21 +36,18 @@ public class FormKategori extends javax.swing.JFrame {
         initComponents();
         controller = new KategoriController();      
         
-        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                row = jTable1.getSelectedRow();
-                if (row != -1) {
-                        setToTextField();
-                        bSave.setEnabled(false);
-                        bDelete.setEnabled(true);
-                        bUpdate.setEnabled(true);
-                        
-                    try {
-                        id = KategoriController.getIdUser(tfKategori.getText());
-                    } catch (SQLException ex) {
-                        Logger.getLogger(FormKategori.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+        jTable1.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            row = jTable1.getSelectedRow();
+            if (row != -1) {
+                setToTextField();
+                bSave.setEnabled(false);
+                bDelete.setEnabled(true);
+                bUpdate.setEnabled(true);
+                
+                try {
+                    id = KategoriController.getIdUser(tfKategori.getText());
+                } catch (SQLException ex) {
+                    Logger.getLogger(FormKategori.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -303,7 +298,7 @@ public class FormKategori extends javax.swing.JFrame {
                 k.setHarga(harga);
                 
                 controller.Create(k);
-                JOptionPane.showMessageDialog(rootPane, "Kategori Berhasil Ditambahkan");
+                JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_INSERT);
                 bersih();
 //            } else {
 //                JOptionPane.showMessageDialog(rootPane, UserController.ACCESS_DENIED);
@@ -331,7 +326,7 @@ public class FormKategori extends javax.swing.JFrame {
         
         try {
             controller.Update(obj);
-            JOptionPane.showMessageDialog(rootPane, "Data was updated successfully");
+            JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_UPDATE);
             bersih();
         } catch (SQLException ex) {
             Logger.getLogger(FormKategori.class.getName()).log(Level.SEVERE, null, ex);
@@ -342,13 +337,12 @@ public class FormKategori extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         try {
-            String title = "Delete Option";
-            String message = "Are you sure want to delete this ?";
-            int reply = JOptionPane.showConfirmDialog(rootPane, message, title, JOptionPane.YES_NO_CANCEL_OPTION);
+            int reply = JOptionPane.showConfirmDialog(rootPane, Status.MESSAGE_DELETE, 
+                    Status.TITLE_DELETE, JOptionPane.YES_NO_CANCEL_OPTION);
             
             if (reply == JOptionPane.YES_OPTION) {
                 controller.Delete(String.valueOf(id));
-                JOptionPane.showMessageDialog(rootPane, "Data was deleted successfully");
+                JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_DELETE);
                 bersih();
             }
             

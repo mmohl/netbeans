@@ -14,7 +14,7 @@ import java.sql.SQLException;
  */
 public interface CrudInterface<T> {
     
-    public T  Create(T object) throws SQLException;
+    public void  Create(T object) throws SQLException;
     public List Read() throws SQLException;
     public void Update(T object) throws SQLException;
     public void Delete(String id) throws SQLException;

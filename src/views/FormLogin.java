@@ -113,7 +113,7 @@ public class FormLogin extends javax.swing.JFrame {
                 main.setVisible(true);
                 this.dispose();
             } else {
-                JOptionPane.showMessageDialog(rootPane, Status.LOGIN_FAILED);
+                JOptionPane.showMessageDialog(rootPane, Status.USER_NOT_FOUND);
             }
             
             

@@ -8,9 +8,9 @@ package views;
 import controllers.PasanganController;
 import helpers.Status;
 import interfaces.CrudInterface;
+import interfaces.FormUtility;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Level;
@@ -26,8 +26,8 @@ import models.Pasangan;
  *
  * @author mmohl
  */
-public class FormPasangan extends javax.swing.JFrame {
-    java.util.List<Pasangan> record = new ArrayList<Pasangan>();
+public class FormPasangan extends javax.swing.JFrame implements FormUtility{
+    java.util.List<Pasangan> record = new ArrayList<>();
     CrudInterface controller;
     int row = 0;
     int id = 0;
@@ -47,35 +47,30 @@ public class FormPasangan extends javax.swing.JFrame {
         rbTidak.setActionCommand("0");
         
         initialitation();
-        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                try {
-                    row = jTable1.getSelectedRow();
+        jTable1.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            try {
+                row = jTable1.getSelectedRow();
+                
+                if (row != -1) {
+                    setToTextField();
+                    int column = 0;
+                    String key = jTable1.getModel().getValueAt(row, column).toString();
+                    id = PasanganController.getIdUser(key);
                     
-                    if (row != -1) {
-                        setToTextField();
-                        int column = 0;
-                        String key = jTable1.getModel().getValueAt(row, column).toString();
-                        id = PasanganController.getIdUser(key);
-                        
-                        bSave.setEnabled(false);
-                        bDelete.setEnabled(true);
-                        bUpdate.setEnabled(true);
-                        
-                        Pasangan p = record.get(row);
-                        kategori = p.getId_kategori();
-                        String text = PasanganController.getAllCategories(p.getId_kategori());
-                        String jml = PasanganController.sumCategoriesPrice(p.getId_kategori());
-                        lTotalHarga.setText("Total Harga Kategori : Rp. " + jml);
-                        lDetail.setText(text);
-                    }
-
-                } catch (ParseException ex) {
-                    Logger.getLogger(FormPasangan.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(FormPasangan.class.getName()).log(Level.SEVERE, null, ex);
+                    bSave.setEnabled(false);
+                    bDelete.setEnabled(true);
+                    bUpdate.setEnabled(true);
+                    
+                    Pasangan p = record.get(row);
+                    kategori = p.getId_kategori();
+                    String text = PasanganController.getAllCategories(p.getId_kategori());
+                    String jml = PasanganController.sumCategoriesPrice(p.getId_kategori());
+                    lTotalHarga.setText("Total Harga Kategori : Rp. " + jml);
+                    lDetail.setText(text);
                 }
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(FormPasangan.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
         
@@ -93,7 +88,8 @@ public class FormPasangan extends javax.swing.JFrame {
         /**
      * Method custom atau buatan
      */
-    private void loadData() {
+    @Override
+    public void loadData() {
         try {
             record = controller.Read();
         } catch (SQLException e) {
@@ -102,7 +98,8 @@ public class FormPasangan extends javax.swing.JFrame {
         }
     }
         
-    private void fillTable() {
+    @Override
+    public void fillTable() {
         Object object[][] = new Object[record.size()][3];
         int x = 0;
         for(Pasangan obj:record) {
@@ -118,7 +115,8 @@ public class FormPasangan extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTable1);
     }
     
-    private void setToTextField() throws ParseException {
+    @Override
+    public void setToTextField() {
         Pasangan obj = record.get(row);
         
         cbPegawai.setSelectedItem(obj);
@@ -134,17 +132,20 @@ public class FormPasangan extends javax.swing.JFrame {
         statusGrup.add(rbTidak);
     }
     
-    private void initialitation() {
+    @Override
+    public final void initialitation() {
         makeNull();
         loadData();
         fillTable();
     }
     
-    private void makeNull() {
+    @Override
+    public void makeNull() {
         tfHarga.setText("");
     }
     
-    private void bersih() {
+    @Override
+    public void bersih() {
         initialitation();
         bSave.setEnabled(true);
         bDelete.setEnabled(false);
@@ -405,7 +406,7 @@ public class FormPasangan extends javax.swing.JFrame {
             
             controller.Create(p);
             
-            JOptionPane.showMessageDialog(rootPane, "Data berhasil ditambahkan");
+            JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_INSERT);
             bersih();
         
         } catch (SQLException ex) {
@@ -447,7 +448,7 @@ public class FormPasangan extends javax.swing.JFrame {
         
         try {
             controller.Update(obj);
-            JOptionPane.showMessageDialog(rootPane, "Data was upddated successfully");
+            JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_UPDATE);
             bersih();
             bSave.setEnabled(true);
         } catch (SQLException ex) {
@@ -583,10 +584,8 @@ public class FormPasangan extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FormPasangan().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new FormPasangan().setVisible(true);
         });
     }
 

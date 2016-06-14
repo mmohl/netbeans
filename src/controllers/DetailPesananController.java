@@ -24,8 +24,8 @@ public class DetailPesananController implements CrudInterface<DetailPesanan>{
     private String sql;
     
     @Override
-    public DetailPesanan Create(DetailPesanan object) throws SQLException {
-        sql = "insert into pesanan values (?, ?, ?)";
+    public void Create(DetailPesanan object) throws SQLException {
+        sql = "insert into detail_pesanan values (?, ?, ?)";
         PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
         
         preparedStatement.setString(1, object.getId());
@@ -34,7 +34,6 @@ public class DetailPesananController implements CrudInterface<DetailPesanan>{
         
         preparedStatement.executeUpdate();
         
-        return object;
     }
 
     @Override

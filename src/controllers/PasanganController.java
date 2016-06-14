@@ -30,7 +30,7 @@ public class PasanganController implements CrudInterface<Pasangan>{
     private String sql;
     
     @Override
-    public Pasangan Create(Pasangan object) throws SQLException {
+    public void Create(Pasangan object) throws SQLException {
         sql = "insert into pasangan values(?,?,?,?,?)";
         PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
         
@@ -42,7 +42,6 @@ public class PasanganController implements CrudInterface<Pasangan>{
         
         preparedStatement.executeUpdate();
         
-        return object;
     }
 
     @Override
@@ -211,6 +210,42 @@ public class PasanganController implements CrudInterface<Pasangan>{
         
         while (resultSet.next()) {
             resources.put(resultSet.getInt("id"), resultSet.getString("kategori"));
+        }
+        
+        for (String id : kategori.split("-")) {
+            
+            if (!result.isEmpty()) {
+                result += ", ";
+            }
+            
+            String data = resources.get(Integer.parseInt(id));
+            result += String.valueOf(i) + ". " + data;
+            i += 1;
+        }
+        
+        return result;
+    }
+    
+    public static String getAllCategoriesById(String idPasangan) throws SQLException {
+        String result = "";
+        String kategori = "";
+        String sql = "SELECT kategori, id FROM kategori";
+        Map<Integer, String> resources = new HashMap<Integer, String>();
+        int i = 1;
+        
+        Statement preparedStatement = Database.getConnection().createStatement();
+        ResultSet resultSet = preparedStatement.executeQuery(sql);
+        
+        while (resultSet.next()) {
+            resources.put(resultSet.getInt("id"), resultSet.getString("kategori"));
+        }
+        
+        sql = "SELECT id_kategori FROM pasangan WHERE id = " + idPasangan;
+        preparedStatement = Database.getConnection().createStatement();
+        resultSet = preparedStatement.executeQuery(sql);
+        
+        while (resultSet.next()) {
+            kategori = resultSet.getString("id_kategori");
         }
         
         for (String id : kategori.split("-")) {

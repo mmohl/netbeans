@@ -11,10 +11,78 @@ package models;
  */
 public class Pesanan {
     
-    private String id, tgl, penyewa, ktp, pasangan, lama, nohape, status, harga;
+    private String id, no_pesanan, nama, tgl, 
+            penyewa, ktp, pasangan, lama, nohape, 
+            status, harga, uangMuka, peJeKe, alamat, 
+            pembayaran, idPenyewa, total;
     
     public Pesanan() {
         
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
+    }
+
+    public String getTotal() {
+        return total;
+    }
+
+    public void setIdPenyewa(String idPenyewa) {
+        this.idPenyewa = idPenyewa;
+    }
+
+    public String getIdPenyewa() {
+        return idPenyewa;
+    }
+
+    public void setPembayaran(String pembayaran) {
+        this.pembayaran = pembayaran;
+    }
+    
+
+    public String getPembayaran() {
+        return pembayaran;
+    }
+
+    public void setNo_pesanan(String no_pesanan) {
+        this.no_pesanan = no_pesanan;
+    }
+
+    public String getNo_pesanan() {
+        return no_pesanan;
+    }
+
+    public void setAlamat(String alamat) {
+        this.alamat = alamat;
+    }
+
+    public String getAlamat() {
+        return alamat;
+    }
+
+    public void setNama(String nama) {
+        this.nama = nama;
+    }
+
+    public String getNama() {
+        return nama;
+    }
+
+    public void setPeJeKe(String peJeKe) {
+        this.peJeKe = peJeKe;
+    }
+
+    public String getPeJeKe() {
+        return peJeKe;
+    }
+
+    public void setUangMuka(String uangMuka) {
+        this.uangMuka = uangMuka;
+    }
+
+    public String getUangMuka() {
+        return uangMuka;
     }
 
     public void setHarga(String harga) {

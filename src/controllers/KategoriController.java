@@ -24,7 +24,7 @@ public class KategoriController implements CrudInterface<Kategori>{
     private String sql;
     
     @Override
-    public Kategori Create(Kategori object) throws SQLException {
+    public void Create(Kategori object) throws SQLException {
         sql = "insert into kategori values(?,?,?)";
         PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
         
@@ -33,7 +33,6 @@ public class KategoriController implements CrudInterface<Kategori>{
         preparedStatement.setInt(3, object.getHarga());
         preparedStatement.executeUpdate();
         
-        return object;
     }
 
     @Override

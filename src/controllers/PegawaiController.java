@@ -29,7 +29,7 @@ public class PegawaiController implements CrudInterface<Pegawai>{
     private Map<String, String> map = new HashMap<String, String>();
 
     @Override
-    public Pegawai Create(Pegawai object) throws SQLException {
+    public void Create(Pegawai object) throws SQLException {
         sql = "insert into pegawai values (?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
         
@@ -42,7 +42,6 @@ public class PegawaiController implements CrudInterface<Pegawai>{
         preparedStatement.setString(7, object.getFoto());
         preparedStatement.executeUpdate();
         
-        return object;
     }
 
     @Override

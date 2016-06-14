@@ -6,12 +6,16 @@
 package views;
 
 import controllers.UserController;
+import helpers.DbMaintenance;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -23,6 +27,7 @@ public class MainForm extends javax.swing.JFrame {
      * Creates new form MainForm
      */
     public MainForm() {
+        super("Main Form");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         initComponents();
     }
@@ -37,6 +42,9 @@ public class MainForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        bBackup = new javax.swing.JButton();
+        bRestore = new javax.swing.JButton();
+        lRestore = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuMaster = new javax.swing.JMenu();
         masterPegawai = new javax.swing.JMenuItem();
@@ -50,6 +58,20 @@ public class MainForm extends javax.swing.JFrame {
         sistemLogout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        bBackup.setText("Backup");
+        bBackup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bBackupActionPerformed(evt);
+            }
+        });
+
+        bRestore.setText("Restore");
+        bRestore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bRestoreActionPerformed(evt);
+            }
+        });
 
         menuMaster.setText("Master");
 
@@ -125,11 +147,24 @@ public class MainForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(bBackup)
+                    .addComponent(bRestore)
+                    .addComponent(lRestore))
+                .addContainerGap(322, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 265, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bBackup)
+                .addGap(18, 18, 18)
+                .addComponent(bRestore)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lRestore)
+                .addContainerGap(165, Short.MAX_VALUE))
         );
 
         pack();
@@ -185,6 +220,34 @@ public class MainForm extends javax.swing.JFrame {
         form.setVisible(true);
     }//GEN-LAST:event_transaksiPemesananActionPerformed
 
+    private void bBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBackupActionPerformed
+        // TODO add your handling code here:
+        DbMaintenance.Backupdbtosql();
+    }//GEN-LAST:event_bBackupActionPerformed
+
+    private void bRestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bRestoreActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fc = new JFileChooser();
+        int value;
+        FileNameExtensionFilter filter = 
+                new FileNameExtensionFilter("SQL", "sql");
+        fc.setFileFilter(filter);
+        
+        value = fc.showOpenDialog(this);
+        
+        if (value == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            String name = file.getName();
+            String path = file.getAbsolutePath();
+            
+            lRestore.setText(name);
+            System.out.println(path);
+            
+            DbMaintenance.Restoredbfromsql(name, path);
+        }
+        
+    }//GEN-LAST:event_bRestoreActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -221,7 +284,10 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bBackup;
+    private javax.swing.JButton bRestore;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JLabel lRestore;
     private javax.swing.JMenuItem masteUser;
     private javax.swing.JMenuItem masterKategori;
     private javax.swing.JMenuItem masterPasangan;

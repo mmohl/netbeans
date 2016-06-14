@@ -16,14 +16,19 @@ import java.util.logging.Logger;
  * @author mmohl
  */
 public class Database {
+    
+    private static final String dbname = "pvl_tb_kel";
+    private static final String dbhost = "localhost";
+    private static final String dbuser = "root";
+    private static final String dbpass = "";
 
     private static Connection conn;
 
     public static Connection getConnection(){
-        if(conn==null){
+        if(conn == null){
             try {
                 DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-                conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/pvl_tb_kel","root","");
+                conn = DriverManager.getConnection("jdbc:mysql://"+ dbhost+ ":3306/"+ dbname, dbuser, dbpass);
             } catch (SQLException ex) {
                 Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
             }

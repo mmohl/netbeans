@@ -6,7 +6,9 @@
 package views;
 
 import controllers.UserController;
+import helpers.Status;
 import interfaces.CrudInterface;
+import interfaces.FormUtility;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import models.User;
 
@@ -22,10 +23,11 @@ import models.User;
  *
  * @author mmohl
  */
-public class FormUser extends javax.swing.JFrame {
-    List<User> record = new ArrayList<User>();
+public final class FormUser extends javax.swing.JFrame implements FormUtility{
+    List<User> record = new ArrayList<>();
     CrudInterface<User> controller;
     int row;
+    String status;
     /**
      * Creates new form User
      */
@@ -33,17 +35,14 @@ public class FormUser extends javax.swing.JFrame {
         initComponents();
         controller = new UserController();
         
-        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                row = jTable1.getSelectedRow();
-                if (row != -1) {
-                        setToTextField();
-                        tfUsername.setEnabled(false);
-                        bSimpan.setEnabled(false);
-                        bHapus.setEnabled(true);
-                        bUbah.setEnabled(true);
-                }
+        jTable1.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            row = jTable1.getSelectedRow();
+            if (row != -1) {
+                setToTextField();
+                tfUsername.setEnabled(false);
+                bSimpan.setEnabled(false);
+                bHapus.setEnabled(true);
+                bUbah.setEnabled(true);
             }
         });
         
@@ -51,12 +50,9 @@ public class FormUser extends javax.swing.JFrame {
         bHapus.setEnabled(false);
         bUbah.setEnabled(false);
     }
-    
-    /**
-     * Method Buatan / custom
-     */
-    
-    private void loadData() {
+        
+    @Override
+    public void loadData() {
         try {
             record = controller.Read();
         } catch (SQLException e) {
@@ -64,35 +60,48 @@ public class FormUser extends javax.swing.JFrame {
                     .log(Level.SEVERE, null, e);
         }
     }
-    private void fillTable() {
+    
+    @Override
+    public void fillTable() {
         Object object[][] = new Object[record.size()][3];
         int x = 0;
+        
         for(User user:record) {
             object[x][0] = user.getUsername();
             object[x][1] = user.getPassword();
             object[x][2] = user.getId();
             x++;
         }
+        
         String judul[] = {"Username", "Password"};
         jTable1.setModel(new DefaultTableModel(object, judul));
         jScrollPane1.setViewportView(jTable1);
     }
-    private void setToTextField() {
+    
+    @Override
+    public void setToTextField() {
         User user = record.get(row);
+        status = user.getStatus();
         tfUsername.setText(user.getUsername());
         pfPassword1.setText(user.getPassword());
     }
-    private void initialitation() {
+    
+    @Override
+    public void initialitation() {
         makeNull();
         loadData();
         fillTable();
     }
-    private void makeNull() {
+    
+    @Override
+    public void makeNull() {
         tfUsername.setText("");
         pfPassword1.setText("");
         pfPassword2.setText("");
     }
-    private void bersih() {
+    
+    @Override
+    public void bersih() {
         initialitation();
         tfUsername.setEnabled(true);
         bSimpan.setEnabled(true);
@@ -286,7 +295,7 @@ public class FormUser extends javax.swing.JFrame {
 //            if ( UserController.Cek(1).equals("1") ) {
                 if (user.banding()) {
                     controller.Create(user);
-                    JOptionPane.showMessageDialog(rootPane, "Data Berhasil di Simpan");
+                    JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_INSERT);
                     initialitation();
                 } else {
                     JOptionPane.showMessageDialog(rootPane, password + " " + password2);
@@ -303,7 +312,7 @@ public class FormUser extends javax.swing.JFrame {
 
     private void bUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUbahActionPerformed
         User user = new User();
-        int row = jTable1.getSelectedRow();
+        row = jTable1.getSelectedRow();
         String key = jTable1.getModel().getValueAt(row, 0).toString();
         
         try {
@@ -314,10 +323,10 @@ public class FormUser extends javax.swing.JFrame {
             
             if (user.banding()) {
                controller.Update(user); 
-               JOptionPane.showMessageDialog(rootPane, "Data was updated successfully");
+               JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_UPDATE);
                bersih();
             } else {
-               JOptionPane.showMessageDialog(rootPane, "Password Mismatch, please try again");
+               JOptionPane.showMessageDialog(rootPane, Status.LOGIN_FAILED);
                pfPassword1.setText("");
                pfPassword2.setText("");
             }
@@ -334,19 +343,23 @@ public class FormUser extends javax.swing.JFrame {
 
     private void bHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHapusActionPerformed
         String name = tfUsername.getText();
-        String title = "Delete Option";
-        String message = "Are you sure want to delete this ?";
-        int reply = JOptionPane.showConfirmDialog(rootPane, title, message, JOptionPane.YES_NO_CANCEL_OPTION);
-        
-        try {
-            if (reply == JOptionPane.YES_OPTION) {
-                controller.Delete(name);
-                JOptionPane.showMessageDialog(rootPane, "Data was deleted successfully");
-                bersih();
+ 
+        if (status.equals("0")) {
+            int reply = JOptionPane.showConfirmDialog(rootPane, 
+                    Status.TITLE_DELETE, Status.MESSAGE_DELETE, JOptionPane.YES_NO_CANCEL_OPTION);
+            try {
+                if (reply == JOptionPane.YES_OPTION) {
+                    controller.Delete(name);
+                    JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_DELETE);
+                    bersih();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(FormUser.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(FormUser.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, Status.USER_ACTIVE_WARNING);
         }
+        
     }//GEN-LAST:event_bHapusActionPerformed
 
     private void bCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCariActionPerformed
@@ -361,14 +374,14 @@ public class FormUser extends javax.swing.JFrame {
                     fillTable();
                     
                 } else {
-                    JOptionPane.showMessageDialog(rootPane, "Data was not found");
+                    JOptionPane.showMessageDialog(rootPane, Status.FAILED_SEARCH);
                 }
                 
             } catch (SQLException ex) {
                 Logger.getLogger(FormUser.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            JOptionPane.showMessageDialog(rootPane, "No keyword is defined");
+            JOptionPane.showMessageDialog(rootPane, Status.NO_KEYWWORD);
         }
     }//GEN-LAST:event_bCariActionPerformed
 
@@ -405,10 +418,8 @@ public class FormUser extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FormUser().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new FormUser().setVisible(true);
         });
     }
 

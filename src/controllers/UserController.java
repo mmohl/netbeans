@@ -42,7 +42,7 @@ public class UserController implements CrudInterface<User>{
     }
     
     @Override
-    public User Create(User object) throws SQLException {
+    public void Create(User object) throws SQLException {
         String sql = "insert into user values(?,?,?,?)";
         PreparedStatement preparedStatement = Database
                 .getConnection()
@@ -53,18 +53,18 @@ public class UserController implements CrudInterface<User>{
         preparedStatement.setString(3, object.getPassword());
         preparedStatement.setString(4, "0");
         preparedStatement.executeUpdate();
-        return object;
     }
 
     @Override
     public java.util.List Read() throws SQLException {
         Statement statement = Database.getConnection().createStatement();
-        ResultSet resultSet = statement.executeQuery("select username, password from user");
+        ResultSet resultSet = statement.executeQuery("select username, password, status from user");
         java.util.List list = new ArrayList();
         while (resultSet.next()) {
             User o = new User();
             o.setUsername(resultSet.getString("username"));
             o.setPassword(resultSet.getString("password"));
+            o.setStatus(resultSet.getString("status"));
             list.add(o);
         }
         return list;
@@ -103,21 +103,30 @@ public class UserController implements CrudInterface<User>{
         ResultSet resultSet = statement.executeQuery(sql);
         String _username = null, _password = null;
         int _id = 0;
+        Boolean stat;
         
         while(resultSet.next()) {
             _id = resultSet.getInt("id");
             _username = resultSet.getString("username");
             _password = resultSet.getString("password");
         }
-        
-        if ( _username.equals(username) && _password.equals(password) ) {
-            sql = "update user set status = '"+1+"' where id = " + _id ;
-            PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
-            preparedStatement.executeUpdate();
-            return true;
+                
+        if (!_username.isEmpty()) {
+            
+            if ( _username.equals(username) && _password.equals(password) ) {
+                sql = "update user set status = '"+1+"' where id = " + _id ;
+                PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
+                preparedStatement.executeUpdate();
+                stat =  true;
+            } else {
+                stat = false;
+            }
+            
         } else {
-            return false;
+            stat = false;
         }
+        
+      return stat;
     }
     
     public static void Logout(int id) throws SQLException {
