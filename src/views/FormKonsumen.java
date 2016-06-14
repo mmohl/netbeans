@@ -6,6 +6,7 @@
 package views;
 
 import controllers.KonsumenController;
+import helpers.Limiter;
 import helpers.Status;
 import interfaces.CrudInterface;
 import interfaces.FormUtility;
@@ -36,6 +37,10 @@ public class FormKonsumen extends javax.swing.JFrame implements FormUtility {
     public FormKonsumen() {
         super("Form Konsumen");
         initComponents();
+        
+        tfKtp.setDocument(new Limiter( (byte)16).getOnlyAngka(tfKtp));
+        tfName.setDocument(new Limiter( (byte)50).getKata(tfName));
+        tfPhone.setDocument(new Limiter((byte) 12).getOnlyAngka(tfPhone));
         
         rbFemale.setActionCommand("w");
         rbMale.setActionCommand("p");

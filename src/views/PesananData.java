@@ -7,6 +7,7 @@ package views;
 
 import controllers.PasanganController;
 import controllers.PesananController;
+import helpers.Limiter;
 import helpers.Status;
 import interfaces.CrudInterface;
 import interfaces.FormUtility;
@@ -44,6 +45,15 @@ public class PesananData extends javax.swing.JFrame implements FormUtility{
         rbDebit.setActionCommand("0");
         rbKredit.setActionCommand("1");
         
+        tfCoupleName.setDocument(new Limiter((byte) 50).getKata(tfCoupleName));
+        tfCouplePrice.setDocument(new Limiter((byte) 8).getOnlyAngka(tfCouplePrice));
+        tfInvoice.setDocument(new Limiter((byte) 17).getKata(tfInvoice));
+        tfKtp.setDocument(new Limiter((byte) 16).getOnlyAngka(tfKtp));
+        tfLama.setDocument(new Limiter((byte) 2).getOnlyAngka(tfLama));
+        tfNama.setDocument(new Limiter((byte) 50).getKata(tfNama));
+        tfNohape.setDocument(new Limiter((byte) 12).getOnlyAngka(tfNohape));
+        tfPeJeKe.setDocument(new Limiter((byte) 5).getKata(tfPeJeKe));
+        tfUangMuka.setDocument(new Limiter((byte) 6).getOnlyAngka(tfUangMuka));
         
         jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override

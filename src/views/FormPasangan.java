@@ -6,6 +6,7 @@
 package views;
 
 import controllers.PasanganController;
+import helpers.Limiter;
 import helpers.Status;
 import interfaces.CrudInterface;
 import interfaces.FormUtility;
@@ -39,6 +40,8 @@ public class FormPasangan extends javax.swing.JFrame implements FormUtility{
         super("Form Pasangan");
         initComponents();
         controller = new PasanganController();
+        
+        tfHarga.setDocument(new Limiter((byte)7).getOnlyAngka(tfHarga));
                         
         liKategori.setModel(PasanganController.loadModel());
         liKategori.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);

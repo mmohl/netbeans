@@ -6,6 +6,7 @@
 package views;
 
 import controllers.KategoriController;
+import helpers.Limiter;
 import helpers.Status;
 import interfaces.CrudInterface;
 import java.awt.event.KeyEvent;
@@ -34,7 +35,9 @@ public class FormKategori extends javax.swing.JFrame {
      */
     public FormKategori() {
         initComponents();
-        controller = new KategoriController();      
+        controller = new KategoriController();
+        tfKategori.setDocument(new Limiter((byte) 10).getKata(tfKategori));
+        tfHarga.setDocument(new Limiter( (byte)6).getOnlyAngka(tfHarga));
         
         jTable1.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
             row = jTable1.getSelectedRow();

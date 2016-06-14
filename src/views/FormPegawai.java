@@ -6,6 +6,7 @@
 package views;
 
 import controllers.PegawaiController;
+import helpers.Limiter;
 import helpers.Status;
 import interfaces.CrudInterface;
 import interfaces.FormUtility;
@@ -56,6 +57,11 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
     public FormPegawai() {
         super("Form Pegawai");
         initComponents();
+        
+        tfKtp.setDocument(new Limiter((byte)16).getOnlyAngka(tfKtp));
+        tfNama.setDocument(new Limiter((byte) 50).getKata(tfNama));
+        tfNohape.setDocument(new Limiter((byte) 12).getOnlyAngka(tfNohape));
+        
         rbPria.setActionCommand("p");
         rbWanita.setActionCommand("w");
         setTanggal();

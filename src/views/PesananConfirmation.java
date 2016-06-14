@@ -6,6 +6,7 @@
 package views;
 
 import controllers.PesananController;
+import helpers.Limiter;
 import helpers.Status;
 import interfaces.CrudInterface;
 import interfaces.FormUtility;
@@ -35,6 +36,8 @@ public class PesananConfirmation extends javax.swing.JFrame implements FormUtili
         super("Confirmation");
         initComponents();
         controller = new PesananController();
+        
+        tfInvoice.setDocument(new Limiter((byte) 17).getFilter(tfInvoice));
         
         tfDate.setEditable(false);
         tfInvoice.setEditable(false);

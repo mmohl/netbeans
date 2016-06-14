@@ -9,6 +9,7 @@ import controllers.DetailPesananController;
 import controllers.KonsumenController;
 import controllers.PasanganController;
 import controllers.PesananController;
+import helpers.Limiter;
 import helpers.Status;
 import interfaces.CrudInterface;
 import java.awt.HeadlessException;
@@ -93,6 +94,12 @@ public class FormPesanan extends javax.swing.JFrame {
         controller = new PesananController();
         lbKategori.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         lbPasangan.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        tfKtp.setDocument(new Limiter((byte) 16).getOnlyAngka(tfKtp));
+        tfLama.setDocument(new Limiter((byte) 2).getKata(tfLama));
+        tfNohape.setDocument(new Limiter((byte) 12).getOnlyAngka(tfNohape));
+        tfPenyewa.setDocument(new Limiter((byte) 50).getKata(tfPenyewa));
+        tfUangMuka.setDocument(new Limiter((byte) 8).getOnlyAngka(tfUangMuka));
         
         rbPria.setActionCommand("p");
         rbWanita.setActionCommand("w");
