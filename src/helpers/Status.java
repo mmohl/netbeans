@@ -22,9 +22,10 @@ public class Status {
     public static final String WELCOME_MESSAGE = "Welcome";
     public static final String LOGIN_FAILED = "Password Mismatch, Please Try Again";
     public static final String LOGIN_SUCCESS = "Welcome";
-    public static final String USER_NOT_FOUND = "User not found";
+    public static final String USER_NOT_FOUND = "Wrong Username or Password";
     public static final String USER_ACTIVE_WARNING = "User still active, cannot be deleted";
     public static final String SUCCESS_CONFIRMED = "Order was confirmed successfully";
+    public static final String FIELD_IS_EMPTY = "Field cannot be empty";
     
     public static <T> String SuccessText(T o){
         return o.getClass().getName();

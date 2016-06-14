@@ -24,13 +24,14 @@ public class FormLogin extends javax.swing.JFrame {
     
     JPanel panel;
     UserController controller;
-    ConcurrentMap<String, Integer> myMap = new ConcurrentHashMap<String, Integer>();
+    ConcurrentMap<String, Integer> myMap = new ConcurrentHashMap<>();
 
 
     /**
      * Creates new form FormLogin
      */
     public FormLogin() {
+        super("Login Form");
         initComponents();
         
         controller = new UserController();
@@ -107,17 +108,22 @@ public class FormLogin extends javax.swing.JFrame {
         String password = pfPassword.getText();
         
         try {
-            if ( controller.login(username, password) ) {
-                JOptionPane.showMessageDialog(rootPane, Status.LOGIN_SUCCESS);
-                MainForm main = new MainForm();
-                main.setVisible(true);
-                this.dispose();
+            if (username.isEmpty() && password.isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane, Status.FIELD_IS_EMPTY);
             } else {
-                JOptionPane.showMessageDialog(rootPane, Status.USER_NOT_FOUND);
+                boolean isValid = controller.login(username, password);
+                if ( isValid ) {
+                    JOptionPane.showMessageDialog(rootPane, Status.LOGIN_SUCCESS);
+                    MainForm main = new MainForm();
+                    main.setVisible(true);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, Status.USER_NOT_FOUND);
+                }
             }
             
-            
         } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             Logger.getLogger(FormLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
 //        if (user.getPassword().equals(password)) {

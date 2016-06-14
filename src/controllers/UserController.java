@@ -98,22 +98,24 @@ public class UserController implements CrudInterface<User>{
     
     public boolean login(String username, String password) throws SQLException {
         
-        String sql = "select * from user where username = '"+username+"'";
+        String sql = "SELECT * FROM user WHERE username = '"+username+"'";
         Statement statement = Database.getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
         String _username = null, _password = null;
         int _id = 0;
         Boolean stat;
         
-        while(resultSet.next()) {
-            _id = resultSet.getInt("id");
-            _username = resultSet.getString("username");
-            _password = resultSet.getString("password");
-        }
-                
-        if (!_username.isEmpty()) {
+        if (!resultSet.next()) {
+            stat = false;
+        } else {
             
-            if ( _username.equals(username) && _password.equals(password) ) {
+            do {
+                _id = resultSet.getInt("id");
+                _username = resultSet.getString("username");
+                _password = resultSet.getString("password");
+            }   while(resultSet.next());
+            
+            if ( _password.equals(password) ) {
                 sql = "update user set status = '"+1+"' where id = " + _id ;
                 PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
                 preparedStatement.executeUpdate();
@@ -121,11 +123,8 @@ public class UserController implements CrudInterface<User>{
             } else {
                 stat = false;
             }
-            
-        } else {
-            stat = false;
         }
-        
+
       return stat;
     }
     

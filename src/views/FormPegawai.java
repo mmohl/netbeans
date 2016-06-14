@@ -6,6 +6,7 @@
 package views;
 
 import controllers.PegawaiController;
+import helpers.KTPValidator;
 import helpers.Limiter;
 import helpers.Status;
 import interfaces.CrudInterface;
@@ -449,11 +450,18 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
           String tanggal = dpTanggal.getDate().getYear()+1900 + "-" + (dpTanggal.getDate().getMonth() + 1) + "-" +dpTanggal.getDate().getDate();
           pegawai.setTanggal_lahir(tanggal);
           pegawai.setFoto( saveAndGetNameImage(file) );
+          boolean isValid = new KTPValidator(pegawai.getKtp()).validate();
           
+          JOptionPane.showMessageDialog(rootPane, isValid);
             try {
-                controller.Create(pegawai);
-                JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_INSERT);
-                bersih();
+                if (isValid != true) {
+                    controller.Create(pegawai);
+                    JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_INSERT);
+                    bersih();
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "KTP sudah terdaftar");
+                }
+                
             } catch (SQLException ex) {
                 Logger.getLogger(FormPegawai.class.getName()).log(Level.SEVERE, null, ex);
             }
