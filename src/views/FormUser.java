@@ -11,7 +11,9 @@ import interfaces.CrudInterface;
 import interfaces.FormUtility;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -108,6 +110,20 @@ public final class FormUser extends javax.swing.JFrame implements FormUtility{
         bSimpan.setEnabled(true);
         bHapus.setEnabled(false);
         bUbah.setEnabled(false);
+    }
+    
+    @Override
+    public Map<String, String> assignToModel() {
+        Map<String, String> model = new HashMap<>();
+        String username = tfUsername.getText();
+        String password = pfPassword1.getText();
+        String password2 = pfPassword2.getText();
+        
+        model.put("username", username);
+        model.put("password", password);
+        model.put("password2", password2);
+        
+        return model;
     }
 
     /**
@@ -283,11 +299,8 @@ public final class FormUser extends javax.swing.JFrame implements FormUtility{
 
     private void bSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSimpanActionPerformed
         // TODO add your handling code here:
-        String username = tfUsername.getText();
-        String password = pfPassword1.getText();
-        String password2 = pfPassword2.getText();
         
-        User user = new User(username, password, password2);
+        User user = new User(assignToModel());
         
         try {
             if ( user.doValidation() ) {
@@ -296,7 +309,7 @@ public final class FormUser extends javax.swing.JFrame implements FormUtility{
                     JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_INSERT);
                     initialitation();
                 } else {
-                    JOptionPane.showMessageDialog(rootPane, password + " " + password2);
+                    JOptionPane.showMessageDialog(rootPane, Status.LOGIN_FAILED);
                     pfPassword1.setText("");
                     pfPassword2.setText("");
                 }
@@ -440,4 +453,6 @@ public final class FormUser extends javax.swing.JFrame implements FormUtility{
     private javax.swing.JTextField tfKataKunci;
     private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
+
+
 }

@@ -6,6 +6,7 @@
 package models;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -36,6 +37,13 @@ public class User extends Validator{
         this.username = username;
         this.password = password;
         this.password2 = password2;
+        inisialisasi();
+    }
+    
+    public User(Map<String, String> model) {
+        this.username = model.get("username");
+        this.password = model.get("password");
+        this.password2 = model.get("password2");
         inisialisasi();
     }
 

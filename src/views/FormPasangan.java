@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import models.Pasangan;
 
@@ -620,4 +619,9 @@ public class FormPasangan extends javax.swing.JFrame implements FormUtility{
     private javax.swing.JTextField tfHarga;
     private javax.swing.JTextField tfKeyword;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public Map<String, String> assignToModel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

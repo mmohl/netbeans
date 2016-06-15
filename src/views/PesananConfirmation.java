@@ -12,6 +12,7 @@ import interfaces.CrudInterface;
 import interfaces.FormUtility;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -348,4 +349,9 @@ public class PesananConfirmation extends javax.swing.JFrame implements FormUtili
     private javax.swing.JTextField tfKtp;
     private javax.swing.JTextField tfName;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public Map<String, String> assignToModel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

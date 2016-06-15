@@ -26,6 +26,7 @@ public class Status {
     public static final String USER_ACTIVE_WARNING = "User still active, cannot be deleted";
     public static final String SUCCESS_CONFIRMED = "Order was confirmed successfully";
     public static final String FIELD_IS_EMPTY = "Field cannot be empty";
+    public static final String KTP_IS_REGISTERED = "Ktp was already registered";
     
     public static <T> String SuccessText(T o){
         return o.getClass().getName();

@@ -5,16 +5,17 @@
  */
 package models;
 
+import java.util.List;
 import java.util.Map;
 
 /**
  *
  * @author mmohl
  */
-public class Konsumen {
+public class Konsumen extends Validator {
     
     private String id, ktp, nama, jenis_kelamin, no_handphone, alamat;
-    private String[] attributes = {"id", "ktp", "nama", "jenis_kelamin", "no_handphone", "alamat"};
+//    private String[] attributes = {"id", "ktp", "nama", "jenis_kelamin", "no_handphone", "alamat"};
     private static String[] attribute = {"id", "ktp", "nama", "jenis_kelamin", "no_handphone", "alamat"};
     
     public Konsumen() {
@@ -29,7 +30,21 @@ public class Konsumen {
         this.ktp = data.get("ktp");
         this.nama = data.get("nama");
         this.no_handphone = data.get("no_handphone");
+        this.alamat = data.get("alamat");
+        inisialisasi();
         
+    }
+
+    @Override
+    protected final void inisialisasi() {
+        attributes = new String[]{"nama", "no_handphone", "ktp"};
+        beValidate.put("nama", new String[]{"3", "50", this.nama});
+        beValidate.put("no_handphone", new String[]{"11", "12", this.no_handphone});
+        beValidate.put("ktp", new String[]{"16", "16", this.ktp});
+    }
+
+    public List<String> getErrorList() {
+        return errorList;
     }
 
     public static String[] getAttributes() {

@@ -193,8 +193,15 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
     public Map assignToModel() {
         Map<String, String> model = new HashMap<>();
         file = fc.getSelectedFile();
+        String _id = String.valueOf(id);
+        String id;
         
-        String id = null;
+        if (_id.isEmpty()) {
+            id = null;
+        } else {
+            id = _id;
+        }
+        
         String name = tfNama.getText();
         String ktp = tfKtp.getText();
         String nohape = tfNohape.getText();
@@ -467,15 +474,7 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
     private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
 //        // TODO add your handling code here:
         Pegawai pegawai = new Pegawai(assignToModel());
-          
-//          file = fc.getSelectedFile();
-//          pegawai.setGender(jenisKelaminGrup.getSelection().getActionCommand());
-//          pegawai.setKtp(tfKtp.getText());
-//          pegawai.setNama(tfNama.getText());
-//          pegawai.setNo_handphone(tfNohape.getText());
-//          String tanggal = dpTanggal.getDate().getYear()+1900 + "-" + (dpTanggal.getDate().getMonth() + 1) + "-" +dpTanggal.getDate().getDate();
-//          pegawai.setTanggal_lahir(tanggal);
-//          pegawai.setFoto( saveAndGetNameImage(file) );
+
           boolean isValidKTP = new KTPValidator(pegawai.getKtp()).validate();
           boolean isValidLength = pegawai.doValidation();
           
@@ -488,7 +487,7 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
                     List<String> error = pegawai.getErrorList();
                     
                     if (isValidKTP != true) {
-                        JOptionPane.showMessageDialog(rootPane, "KTP sudah terdaftar");
+                        JOptionPane.showMessageDialog(rootPane, Status.KTP_IS_REGISTERED);
                     }
                     JOptionPane.showMessageDialog(rootPane, error.toArray());
                 }
@@ -509,20 +508,7 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
     private void bUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUpdateActionPerformed
         // TODO add your handling code here:
         file = fc.getSelectedFile();
-        Pegawai obj = new Pegawai();
-        String nama = tfNama.getText();
-        String ktp = tfKtp.getText();
-        String nohape = tfNohape.getText();
-        String gender = jenisKelaminGrup.getSelection().getActionCommand();
-        String tanggal = dpTanggal.getDate().getYear()+1900 + "-" + (dpTanggal.getDate().getMonth() + 1) + "-" +dpTanggal.getDate().getDate();
-        String _id = String.valueOf(id);
-        
-        obj.setId(_id);
-        obj.setNama(nama);
-        obj.setKtp(ktp);
-        obj.setNo_handphone(nohape);
-        obj.setGender(gender);
-        obj.setTanggal_lahir(tanggal);
+        Pegawai obj = new Pegawai(assignToModel());
         
         if (file != null) {
             file = new File(path + gambar);
@@ -534,12 +520,26 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
             obj.setFoto(gambar);
         }
         
+        boolean isValidKtp = new KTPValidator(obj.getKtp()).validate();
+        boolean isValidLength = obj.doValidation();
         
         try {
-            controller.Update(obj);
-            JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_UPDATE);
-            bersih();
-//        JOptionPane.showMessageDialog(rootPane, id);
+            if ((isValidKtp != true) && isValidLength) {
+                controller.Update(obj);
+                JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_UPDATE);
+                bersih(); 
+            } else {
+                List<String> error = obj.getErrorList();
+                    
+                    if (isValidKtp) {
+                        JOptionPane.showMessageDialog(rootPane, Status.KTP_IS_REGISTERED);
+                    }
+                    
+                    if (!error.isEmpty()) {
+                        JOptionPane.showMessageDialog(rootPane, error.toArray());
+                    }
+            }
+            
         } catch (SQLException ex) {
             Logger.getLogger(FormPegawai.class.getName()).log(Level.SEVERE, null, ex);
         }

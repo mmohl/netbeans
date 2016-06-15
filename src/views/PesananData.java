@@ -14,6 +14,7 @@ import interfaces.FormUtility;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -638,6 +639,11 @@ public class PesananData extends javax.swing.JFrame implements FormUtility{
         initialitation();
     }
     
+    @Override
+    public Map<String, String> assignToModel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     private void setNotEditable() {
         tfCoupleName.setEditable(false);
         tfCouplePrice.setEditable(false);
@@ -694,4 +700,5 @@ public class PesananData extends javax.swing.JFrame implements FormUtility{
     private javax.swing.JTextField tfTanggal;
     private javax.swing.JTextField tfUangMuka;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -6,18 +6,20 @@
 package views;
 
 import controllers.KonsumenController;
+import helpers.KTPValidator;
 import helpers.Limiter;
 import helpers.Status;
 import interfaces.CrudInterface;
 import interfaces.FormUtility;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import models.Konsumen;
 
@@ -46,21 +48,18 @@ public class FormKonsumen extends javax.swing.JFrame implements FormUtility {
         rbMale.setActionCommand("p");
         
         controller = new KonsumenController();
-        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                row = jTable1.getSelectedRow();
+        jTable1.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            row = jTable1.getSelectedRow();
+            
+            if (row != -1) {
+                Konsumen konsumen = record.get(row);
+                id = Integer.parseInt(konsumen.getId());
                 
-                if (row != -1) {
-                    Konsumen konsumen = record.get(row);
-                    id = Integer.parseInt(konsumen.getId());
-                    
-                    bDelete.setEnabled(true);
-                    bReset.setEnabled(true);
-                    bUpdate.setEnabled(true);
-                    
-                    setToTextField();
-                }
+                bDelete.setEnabled(true);
+                bReset.setEnabled(true);
+                bUpdate.setEnabled(true);
+                
+                setToTextField();
             }
         });
         
@@ -300,26 +299,29 @@ public class FormKonsumen extends javax.swing.JFrame implements FormUtility {
     }//GEN-LAST:event_bSearchActionPerformed
 
     private void bUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUpdateActionPerformed
-        // TODO add your handling code here:
-        String id = String.valueOf(this.id);
-        String nama = tfName.getText();
-        String ktp = tfKtp.getText();
-        String alamat = taAddress.getText();
-        String nohape = tfPhone.getText();
-        String jeke = genderGroup.getSelection().getActionCommand();
         
-        Konsumen konsumen = new Konsumen();
-        konsumen.setId(id);
-        konsumen.setAlamat(alamat);
-        konsumen.setJenis_kelamin(jeke);
-        konsumen.setKtp(ktp);
-        konsumen.setNohape(nohape);
-        konsumen.setNama(nama);
+        Konsumen konsumen = new Konsumen(assignToModel());
+        boolean isValidKtp = new KTPValidator(konsumen.getKtp()).validate();
+        boolean isValidLength = konsumen.doValidation();
         
         try {
-            controller.Update(konsumen);
-            JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_UPDATE);
-            bersih();
+            if ((isValidKtp != true) && isValidLength) {
+                controller.Update(konsumen);
+                JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_UPDATE);
+                bersih();
+            } else {
+                List<String> error = konsumen.getErrorList();
+                
+                if (isValidKtp) {
+                    JOptionPane.showMessageDialog(rootPane, Status.KTP_IS_REGISTERED);
+                }
+                
+                if (!error.isEmpty()) {
+                    JOptionPane.showMessageDialog(rootPane, error.toArray());
+                }
+                
+            }
+            
         } catch (SQLException ex) {
             Logger.getLogger(FormKonsumen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -425,7 +427,7 @@ public class FormKonsumen extends javax.swing.JFrame implements FormUtility {
     }
 
     @Override
-    public void initialitation() {
+    public final void initialitation() {
         makeNull();
         loadData();
         fillTable();
@@ -448,6 +450,27 @@ public class FormKonsumen extends javax.swing.JFrame implements FormUtility {
     @Override
     public void bersih() {
         initialitation();
+    }
+    
+    @Override
+    public Map assignToModel() {
+        Map<String, String> model = new HashMap<>();
+        
+        String id = String.valueOf(this.id);
+        String nama = tfName.getText();
+        String ktp = tfKtp.getText();
+        String alamat = taAddress.getText();
+        String nohape = tfPhone.getText();
+        String jeke = genderGroup.getSelection().getActionCommand();
+        
+        model.put("id", id);
+        model.put("nama", nama);
+        model.put("ktp", ktp);
+        model.put("alamat", alamat);
+        model.put("no_handphone", nohape);
+        model.put("jenis_kelamin", jeke);
+        
+        return model;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -476,4 +499,6 @@ public class FormKonsumen extends javax.swing.JFrame implements FormUtility {
     private javax.swing.JTextField tfName;
     private javax.swing.JTextField tfPhone;
     // End of variables declaration//GEN-END:variables
+
+    
 }
