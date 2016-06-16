@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
  */
 public class DbMaintenance {
     
-    public static void Backupdbtosql() {
+    public static void Backupdbtosql(String dbname, String dbuser, String dbpass) {
     try {
 
         /*NOTE: Getting path to the Jar file being executed*/
@@ -35,47 +35,40 @@ public class DbMaintenance {
         String dbUser;
         String dbPass;
         String fileName;
-        String savePath;
+        String savePath = null;
         
-        dbName = "pvl_tb_kel";
-        dbUser = "root";
-        dbPass = null;
+        dbName = dbname;
+        dbUser = dbuser;
+        dbPass = dbpass;
         Date date = Calendar.getInstance().getTime();
-        savePath = System.getProperty("user.dir") + "/Backup/";
-        fileName = "backup_" + (date.getYear() + 1900) + ":" + (date.getMonth() + 1) + ":" + date.getDate() + "_"
-                + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + ".sql";
-
-        /*NOTE: Creating Path Constraints for folder saving*/
-        /*NOTE: Here the backup folder is created for saving inside it*/
-        String folderPath = jarDir + "\\backup";
-
-        /*NOTE: Creating Folder if it does not exist*/
-        File f1 = new File(folderPath);
-        f1.mkdir();
-        
         String os = System.getProperty("os.name");
-        String executeCmd1 = null;
-        String executeCmd2 = null;
+        String executeCmd = null;
         
-        switch (os) {
-            case "Linux" :
-                executeCmd1 = "/opt/lampp/bin/mysqldump -u" + dbUser + " -p" + dbPass + " -B '" + dbName + "' -r " + savePath + fileName;
-                executeCmd2 = "/opt/lampp/bin/mysqldump -u " + dbUser + " -B " + dbName + " -r " + savePath + fileName;
-                break;
-            case "Windows" :
-                executeCmd1 = "C:/xampp/bin/mysqldump -u" + dbUser + " -p" + dbPass + " -B '" + dbName + "' -r " + savePath + fileName;
-                executeCmd2 = "C:/xampp/bin/mysqldump -u " + dbUser + " -B " + dbName + " -r " + savePath + fileName;
-                break;
+        fileName = "backup_" + (date.getYear() + 1900) + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "_"
+                + date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds() + ".sql";
+        
+        
+        if (os.substring(0, 2).startsWith("W")) {
+            if (dbPass.isEmpty()) {
+                executeCmd = "C:\\xampp\\mysql\\bin\\mysqldump.exe -u " + dbUser + " -B " + dbName + " -r " + savePath + fileName;
+            } else {
+                executeCmd = "C:/xampp/bin/mysqldump -u" + dbUser + " -p" + dbPass + " -B '" + dbName + "' -r " + savePath + fileName;
+            }
+            savePath = System.getProperty("user.dir") + "\\Backup\\";
+            
+        } else if (os.substring(0, 2).startsWith("L") || os.substring(0, 2).startsWith("M")){
+            if (dbPass.isEmpty()) {
+               executeCmd = "/opt/lampp/bin/mysqldump -u " + dbUser + " -B " + dbName + " -r " + savePath + fileName; 
+            } else {
+                executeCmd = "/opt/lampp/bin/mysqldump -u" + dbUser + " -p" + dbPass + " -B '" + dbName + "' -r " + savePath + fileName;
+            }
+            savePath = System.getProperty("user.dir") + "/Backup/";
         }
-
-        /*NOTE: Used to create a cmd command*/
         
-
-        /*NOTE: Executing the command here*/
-
-        runtimeProcess = Runtime.getRuntime().exec(executeCmd2);
+        runtimeProcess = Runtime.getRuntime().exec(executeCmd);
 
         int processComplete = runtimeProcess.waitFor();
+        
         /*NOTE: processComplete=0 if correctly executed, will contain other values if not*/
         if (processComplete == 0) {
             System.out.println("Backup Complete");
@@ -111,14 +104,21 @@ public class DbMaintenance {
             /*NOTE: Do not create a single large string, this will cause buffer locking, use string array*/
             String[] executeCmd = null;
             String os = System.getProperty("os.name");
-        
-            switch (os) {
-                case "Linux" :
-                    executeCmd = new String[]{"/opt/lampp/bin/mysql", dbName, "-u" + dbUser, "-e", " source " + path};
-                    break;
-                case "Windows" :
-                    executeCmd = new String[]{"C:/xampp/bin/mysql", dbName, "-u" + dbUser, "-e", " source " + path};
-                    break;
+            
+            if (os.substring(0, 7).startsWith("Windows")) {
+                if (dbPass.isEmpty()) {
+                    executeCmd = new String[]{"C:\\xampp\\mysql\\bin\\mysql.exe", dbName, "-u" + dbUser, "-e", " source " + path};
+                } else {
+                    executeCmd = new String[]{"C:\\xampp\\mysql\\bin\\mysql.exe", dbName, "-u" + dbUser, "-p" + dbPass, "-e", " source " + path};
+                }
+                
+            } else if (os.substring(0, 6).startsWith("Linux") || os.substring(0, 4).startsWith("Mac")){
+                if (dbPass.isEmpty()) {
+                   executeCmd = new String[]{"/opt/lampp/bin/mysql", dbName, "-u" + dbUser, "-e", " source " + path}; 
+                } else {
+                    executeCmd = new String[]{"/opt/lampp/bin/mysql", dbName, "-u" + dbUser, "-p" + dbPass, "-e", " source " + path};
+                }
+                
             }
 
             /*NOTE: processComplete=0 if correctly executed, will contain other values if not*/

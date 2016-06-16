@@ -733,7 +733,6 @@ public class FormPesanan extends javax.swing.JFrame {
         taAlamat.setEditable(false);
         PeJeKeGrup.clearSelection();
         
-       
         try {
             model = PesananController.loadKonsumen();
             cbKonsumen.setModel(model);
