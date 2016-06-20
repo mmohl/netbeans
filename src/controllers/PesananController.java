@@ -423,7 +423,7 @@ public class PesananController implements CrudInterface<Pesanan>{
                 "    LEFT JOIN konsumen ko ON p.id_konsumen = ko.id\n" +
                 "    LEFT JOIN pegawai pe ON pa.id_pegawai = pe.id\n" +
                 "    LEFT JOIN detail_pesanan dp ON p.id = dp.id_pesanan\n" +
-                "    WHERE p.status = '0' AND p.pembayaran = '1'" +   
+                "    WHERE p.status = '0' AND p.pembayaran = '0'" +   
                 "    ORDER BY p.tanggal DESC";
         Statement preparedStatement = Database.getConnection().createStatement();
         ResultSet resultSet = preparedStatement.executeQuery(sql);

@@ -40,8 +40,8 @@ public class KasController implements CrudInterface<Kas>{
 
     @Override
     public List Read() throws SQLException {
-        sql = "SELECT k.*, p.nomor_pesanan, sum(k.nominal) AS total FROM kas k\n" +
-                "LEFT JOIN pesanan p ON k.id_pesanan = p.id";
+        sql = "SELECT k.*, p.nomor_pesanan FROM kas k\n" +
+                "LEFT JOIN pesanan p ON k.id_pesanan = p.id ";
         statement = Database.getConnection().createStatement();
         List<Kas> source;
         
@@ -54,7 +54,7 @@ public class KasController implements CrudInterface<Kas>{
                 kas.setId_pesanan(String.valueOf(resultSet.getInt("id_pesanan")));
                 kas.setNominal(String.valueOf(resultSet.getInt("nominal")));
                 kas.setTanggal(String.valueOf(resultSet.getDate("tanggal")));
-                kas.setTotal(String.valueOf(resultSet.getInt("total")));
+//                kas.setTotal(String.valueOf(resultSet.getInt("total")));
                 
                 source.add(kas);
             }
@@ -79,6 +79,23 @@ public class KasController implements CrudInterface<Kas>{
     @Override
     public List Search(String name) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public static Kas getDataByInvoice(String invoice) throws SQLException {
+        Kas kas = new Kas();
+        String sql = "SELECT p.id AS idPesanan,  p.total AS total FROM pesanan p\n" +
+            "LEFT JOIN pasangan pa ON p.id_pasangan = pa.id\n" +
+            "LEFT JOIN pegawai pe ON pa.id_pegawai = pe.id\n" +
+            "WHERE p.nomor_pesanan = '" + invoice + "'";
+        Statement statement = Database.getConnection().createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        
+        while (resultSet.next()){
+            kas.setId_pesanan(String.valueOf(resultSet.getInt("idPesanan")));
+            kas.setTotal(String.valueOf(resultSet.getInt("total")));
+        }
+        
+        return kas;
     }
     
 }

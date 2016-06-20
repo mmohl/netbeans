@@ -5,7 +5,9 @@
  */
 package views;
 
+import controllers.KasController;
 import controllers.PesananController;
+import controllers.SaldoController;
 import helpers.Limiter;
 import helpers.Status;
 import interfaces.CrudInterface;
@@ -18,7 +20,9 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
+import models.Kas;
 import models.Pesanan;
+import models.Saldo;
 
 /**
  *
@@ -234,6 +238,8 @@ public class PesananConfirmation extends javax.swing.JFrame implements FormUtili
         
         try {
             controller.Update(pesanan);
+            addSaldo();
+            addKas();
             JOptionPane.showMessageDialog(rootPane, Status.SUCCESS_CONFIRMED);
             bersih();
         } catch (SQLException ex) {
@@ -353,5 +359,26 @@ public class PesananConfirmation extends javax.swing.JFrame implements FormUtili
     @Override
     public Map<String, String> assignToModel() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private void addSaldo() throws SQLException {
+        String invoice = tfInvoice.getText();
+        Saldo saldo = SaldoController.getDataByInvoice(invoice);
+        saldo.setNominal(String.valueOf(saldo.getPercentage()));
+        saldo.setTanggal(saldo.getDate());
+        System.out.println(saldo.getTanggal());
+        
+        CrudInterface<Saldo> saldoController = new SaldoController();
+        saldoController.Create(saldo);
+    }
+    
+    private void addKas() throws SQLException {
+        String invoice = tfInvoice.getText();
+        Kas kas = KasController.getDataByInvoice(invoice);
+        kas.setNominal(String.valueOf(kas.getPercentage()));
+        kas.setTanggal(kas.getDate());
+        
+        CrudInterface kasController = new KasController();
+        kasController.Create(kas);
     }
 }

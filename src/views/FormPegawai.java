@@ -67,6 +67,9 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
         
         rbPria.setActionCommand("p");
         rbWanita.setActionCommand("w");
+        rbYa.setActionCommand("1");
+        rbTidak.setActionCommand("0");
+        
         setTanggal();
         controller = new PegawaiController();
         fc = new JFileChooser();
@@ -159,8 +162,14 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
             rbWanita.setSelected(true);
         }
         
-        jenisKelaminGrup.add(rbPria);
-        jenisKelaminGrup.add(rbWanita);
+        switch (obj.getStatus()) {
+            case "0":
+                rbTidak.setSelected(true);
+                break;
+            case "1":
+                rbYa.setSelected(true);
+                break;
+        }
         
     }
     
@@ -208,6 +217,7 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
         String jeke = jenisKelaminGrup.getSelection().getActionCommand();
         String tanggal = dpTanggal.getDate().getYear()+1900 + "-" + (dpTanggal.getDate().getMonth() + 1) + "-" +dpTanggal.getDate().getDate();
         String gambar = saveAndGetNameImage(file);
+        String status = statusGrup.getSelection().getActionCommand();
         
         model.put("id", id);
         model.put("ktp", ktp);
@@ -216,6 +226,7 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
         model.put("jenis_kelamin", jeke);
         model.put("gambar", gambar);
         model.put("tanggal_lahir", tanggal);
+        model.put("status", status);
         
         return model;
     }
@@ -231,6 +242,7 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
     private void initComponents() {
 
         jenisKelaminGrup = new javax.swing.ButtonGroup();
+        statusGrup = new javax.swing.ButtonGroup();
         lNama = new javax.swing.JLabel();
         tfNama = new javax.swing.JTextField();
         lJenisKelamin = new javax.swing.JLabel();
@@ -256,6 +268,9 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
         bBrowse = new javax.swing.JButton();
         lGambar = new javax.swing.JLabel();
         lPictureName = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        rbYa = new javax.swing.JRadioButton();
+        rbTidak = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -358,6 +373,14 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
 
         lGambar.setText("Gambar");
 
+        jLabel3.setText("Status");
+
+        statusGrup.add(rbYa);
+        rbYa.setText("Ya");
+
+        statusGrup.add(rbTidak);
+        rbTidak.setText("Tidak");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -365,15 +388,13 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lTanggalLahir)
                             .addComponent(jLabel1)
                             .addComponent(lJenisKelamin)
                             .addComponent(lNama))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(rbPria)
@@ -382,22 +403,6 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
                             .addComponent(tfNama)
                             .addComponent(dpTanggal, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
                             .addComponent(tfKtp)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lKeyword)
-                        .addGap(42, 42, 42)
-                        .addComponent(tfKeyword))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(bSave)
-                                .addGap(18, 18, 18)
-                                .addComponent(bUpdate)
-                                .addGap(18, 18, 18)
-                                .addComponent(bDelete)
-                                .addGap(18, 18, 18)
-                                .addComponent(bReset))
-                            .addComponent(bSearch))
-                        .addGap(0, 100, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -409,8 +414,32 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lPictureName)
                                     .addComponent(bBrowse))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lKeyword)
+                        .addGap(42, 42, 42)
+                        .addComponent(tfKeyword))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bSearch)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(bSave)
+                                .addGap(18, 18, 18)
+                                .addComponent(bUpdate)
+                                .addGap(18, 18, 18)
+                                .addComponent(bDelete)
+                                .addGap(18, 18, 18)
+                                .addComponent(bReset))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(83, 83, 83)
+                                .addComponent(rbYa)
+                                .addGap(18, 18, 18)
+                                .addComponent(rbTidak)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -419,9 +448,6 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(19, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lNama)
@@ -449,7 +475,12 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
                             .addComponent(lGambar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lPictureName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(4, 4, 4)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(rbYa)
+                            .addComponent(rbTidak))
+                        .addGap(25, 25, 25)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -464,8 +495,9 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
                             .addComponent(lKeyword)
                             .addComponent(tfKeyword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(bSearch)
-                        .addGap(71, 71, 71))))
+                        .addComponent(bSearch))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
@@ -698,6 +730,7 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
     private org.jdesktop.swingx.JXDatePicker dpTanggal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
@@ -710,7 +743,10 @@ public class FormPegawai extends javax.swing.JFrame implements FormUtility{
     private javax.swing.JLabel lPictureName;
     private javax.swing.JLabel lTanggalLahir;
     private javax.swing.JRadioButton rbPria;
+    private javax.swing.JRadioButton rbTidak;
     private javax.swing.JRadioButton rbWanita;
+    private javax.swing.JRadioButton rbYa;
+    private javax.swing.ButtonGroup statusGrup;
     private javax.swing.JTextField tfKeyword;
     private javax.swing.JTextField tfKtp;
     private javax.swing.JTextField tfNama;

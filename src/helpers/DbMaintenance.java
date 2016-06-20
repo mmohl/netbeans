@@ -49,20 +49,22 @@ public class DbMaintenance {
         
         
         if (os.substring(0, 2).startsWith("W")) {
+            savePath = System.getProperty("user.dir") + "\\Backup\\";
             if (dbPass.isEmpty()) {
                 executeCmd = "C:\\xampp\\mysql\\bin\\mysqldump.exe -u " + dbUser + " -B " + dbName + " -r " + savePath + fileName;
             } else {
                 executeCmd = "C:/xampp/bin/mysqldump -u" + dbUser + " -p" + dbPass + " -B '" + dbName + "' -r " + savePath + fileName;
             }
-            savePath = System.getProperty("user.dir") + "\\Backup\\";
+            
             
         } else if (os.substring(0, 2).startsWith("L") || os.substring(0, 2).startsWith("M")){
+            savePath = System.getProperty("user.dir") + "/Backup/";
             if (dbPass.isEmpty()) {
                executeCmd = "/opt/lampp/bin/mysqldump -u " + dbUser + " -B " + dbName + " -r " + savePath + fileName; 
             } else {
                 executeCmd = "/opt/lampp/bin/mysqldump -u" + dbUser + " -p" + dbPass + " -B '" + dbName + "' -r " + savePath + fileName;
             }
-            savePath = System.getProperty("user.dir") + "/Backup/";
+            
         }
         
         runtimeProcess = Runtime.getRuntime().exec(executeCmd);

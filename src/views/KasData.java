@@ -10,6 +10,7 @@ import interfaces.CrudInterface;
 import interfaces.FormUtility;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -50,7 +51,11 @@ public class KasData extends javax.swing.JFrame implements FormUtility{
         });
         
         initialitation();
-        lTotalValue.setText(record.get(row).getTotal());
+        int value = 0;
+        for (Kas kasx : record) {
+            value = value + Integer.parseInt(kasx.getNominal());
+        }
+        lTotalValue.setText(String.valueOf(value));
     }
 
     /**

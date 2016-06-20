@@ -15,8 +15,8 @@ import java.util.Map;
  */
 public class Pegawai extends Validator{
     Map<String, String> pegawaiMap = new HashMap<String, String>();
-    public String[] pegawaiAttrib = {"id", "nama", "no_handphone", "jenis_kelamin", "gambar", "tanggal_lahir", "ktp"};
-    private String id, nama, no_handphone, gender, foto, tanggal_lahir, ktp;
+    public String[] pegawaiAttrib = {"id", "nama", "no_handphone", "jenis_kelamin", "gambar", "tanggal_lahir", "ktp", "status"};
+    private String id, nama, no_handphone, gender, foto, tanggal_lahir, ktp, status;
     
     public Pegawai() {
        
@@ -34,6 +34,7 @@ public class Pegawai extends Validator{
        foto = (String) map.get(pegawaiAttrib[4]);
        tanggal_lahir = (String) map.get(pegawaiAttrib[5]);
        ktp = (String) map.get(pegawaiAttrib[6]);
+       status = (String) map.get(pegawaiAttrib[7]);
        inisialisasi();
     }
 
@@ -103,6 +104,14 @@ public class Pegawai extends Validator{
 
     public String getTanggal_lahir() {
         return tanggal_lahir;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
     
     @Override

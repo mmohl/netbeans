@@ -5,6 +5,7 @@
  */
 package models;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Map;
  */
 public class Saldo {
     
-    private String id, id_pesanan, id_pegawai, tanggal, nominal;
+    private String id, id_pesanan, id_pegawai, tanggal, nominal, nama, total, no_pesanan;
     
     public Saldo() {
         
@@ -28,11 +29,36 @@ public class Saldo {
     }
     
     public Integer getPercentage() {
-        return (Integer.valueOf(nominal) * 70) / 100;
+        return (Integer.valueOf(total) * 70) / 100;
+    }
+    
+    public String getDate() {
+        Date date = new Date();
+        String tgl;
+        String yy, mm, dd;
+       
+        yy = String.valueOf( date.getYear() + 1900);
+        mm = String.valueOf( date.getMonth() + 1);
+        dd = String.valueOf( date.getDate() );
+        tgl = yy + "-" + mm + "-" + dd;
+        return tgl;
     }
 
     public String getId() {
         return id;
+    }
+
+    public String getNo_pesanan() {
+        return no_pesanan;
+    }
+    
+
+    public String getNama() {
+        return nama;
+    }
+
+    public String getTotal() {
+        return total;
     }
 
     public String getId_pegawai() {
@@ -70,5 +96,20 @@ public class Saldo {
     public void setTanggal(String tanggal) {
         this.tanggal = tanggal;
     }
+
+    public void setNama(String nama) {
+        this.nama = nama;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
+    }
+
+    public void setNo_pesanan(String no_pesanan) {
+        this.no_pesanan = no_pesanan;
+    }
+    
+    
+    
     
 }

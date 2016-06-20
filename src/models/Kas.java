@@ -5,6 +5,7 @@
  */
 package models;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -27,7 +28,19 @@ public class Kas {
     }
     
     public Integer getPercentage() {
-        return (Integer.parseInt(nominal) * 30) / 100;
+        return (Integer.parseInt(total) * 30) / 100;
+    }
+    
+    public String getDate() {
+        Date date = new Date();
+        String tgl;
+        String yy, mm, dd, acak;
+       
+        yy = String.valueOf( date.getYear() + 1900);
+        mm = String.valueOf( date.getMonth() + 1);
+        dd = String.valueOf( date.getDate() );
+        tgl = yy + "-" + mm + "-" + dd;
+        return tgl;
     }
 
     public String getId() {

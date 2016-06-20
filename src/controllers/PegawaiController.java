@@ -25,12 +25,12 @@ import models.Pegawai;
 public class PegawaiController implements CrudInterface<Pegawai>{
     
     private String sql;
-    private String[] attributes = {"id", "nama", "no_handphone", "jenis_kelamin", "gambar", "tanggal_lahir", "ktp"};
+    private String[] attributes = {"id", "nama", "no_handphone", "jenis_kelamin", "gambar", "tanggal_lahir", "ktp", "status"};
     private Map<String, String> map = new HashMap<String, String>();
 
     @Override
     public void Create(Pegawai object) throws SQLException {
-        sql = "insert into pegawai values (?, ?, ?, ?, ?, ?, ?)";
+        sql = "insert into pegawai values (?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
         
         preparedStatement.setString(1, null);
@@ -40,13 +40,14 @@ public class PegawaiController implements CrudInterface<Pegawai>{
         preparedStatement.setString(5, object.getKtp());
         preparedStatement.setString(6, object.getNo_handphone());
         preparedStatement.setString(7, object.getFoto());
+        preparedStatement.setString(8, object.getStatus());
         preparedStatement.executeUpdate();
         
     }
 
     @Override
     public java.util.List Read() throws SQLException {
-        sql = "select * from pegawai ";
+        sql = "SELECT * FROM pegawai";
         Statement statement = Database.getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
         java.util.List list = new ArrayList<Pegawai>();
@@ -57,6 +58,7 @@ public class PegawaiController implements CrudInterface<Pegawai>{
             for (String attribute : attributes) {
                 map.put(attribute, resultSet.getString(attribute));
             }
+            
             Pegawai pegawai = new Pegawai(map);
             list.add(pegawai);
         }
@@ -65,7 +67,7 @@ public class PegawaiController implements CrudInterface<Pegawai>{
 
     @Override
     public void Update(Pegawai object) throws SQLException {
-        sql = "update pegawai set nama = ?, no_handphone = ?, tanggal_lahir = ?, ktp = ?, jenis_kelamin = ?, gambar = ? where id = ?";
+        sql = "update pegawai set nama = ?, no_handphone = ?, tanggal_lahir = ?, ktp = ?, jenis_kelamin = ?, gambar = ?, status = ? where id = ?";
         PreparedStatement preparedStatement = Database.getConnection().prepareStatement(sql);
         preparedStatement.setInt(7, Integer.parseInt(object.getId()));
         preparedStatement.setString(1, object.getNama());
@@ -74,6 +76,7 @@ public class PegawaiController implements CrudInterface<Pegawai>{
         preparedStatement.setString(4, object.getKtp());
         preparedStatement.setString(5, object.getGender());
         preparedStatement.setString(6, object.getFoto());
+        preparedStatement.setString(8, object.getStatus());
         preparedStatement.executeUpdate();
     }
 

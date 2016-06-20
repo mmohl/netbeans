@@ -132,7 +132,8 @@ public class PasanganController implements CrudInterface<Pasangan>{
     public static DefaultComboBoxModel loadPegawai() throws SQLException {
         DefaultComboBoxModel combo = new DefaultComboBoxModel();
         
-        String sql = "SELECT p.nama FROM pegawai p LEFT JOIN pasangan pp ON p.id = pp.id_pegawai WHERE pp.id IS NULL";
+        String sql = "SELECT p.nama FROM pegawai p LEFT JOIN pasangan pp ON p.id = pp.id_pegawai "
+                + "WHERE pp.id IS NULL AND p.status = '1'";
         ResultSet resultSet;
         try (Statement statement = Database.getConnection().createStatement()) {
             resultSet = statement.executeQuery(sql);
